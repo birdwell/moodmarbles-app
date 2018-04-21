@@ -4,14 +4,12 @@ import BoxContainer from './BoxContainer';
 import GeneralLights from './GeneralLights';
 import OrbitControls from 'three-orbitcontrols';
 import Marble from './Marble';
-import tweets from './data/coffee.json';
 import Vector from './Vector';
 
 const gravity = new Vector(0, -0.2, 0);
 
 var collidables = []
-
-export default canvas => {
+export default (canvas, tweets) => {
     const clock = new THREE.Clock();
     const origin = new THREE.Vector3(0, 0, 0);
     const mouse = new THREE.Vector2();
