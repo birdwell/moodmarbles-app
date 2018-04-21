@@ -22,10 +22,12 @@ class Marble {
 		this.object = new Mesh(sphereGeometry, phongMaterial);
 
 		// Initial Position
-		const position = new Vector(getRandomInt(-50, 50), 0, getRandomInt(-50, 50));
+		const position = new Vector(getRandomInt(-50, 50), 100, getRandomInt(-50, 50));
 		this.object.position.x = position.x;
 		this.object.position.y = position.y;
 		this.object.position.z = position.z;
+
+		this.velocity = new Vector(0, 0, 0);
 
 		// Give object a mass
 		this.mass = tweet.magnitude;
@@ -42,11 +44,10 @@ class Marble {
 		this.forces.push(force);
 	}
 
-	adjustPosition(delta) {
-		delta.scale(this.mass);
-		this.object.position.x += delta.x;
-		this.object.position.y += delta.y;
-		this.object.position.z += delta.z;
+	adjustPosition() {
+		this.object.position.x += this.velocity.x;
+		this.object.position.y += this.velocity.y;
+		this.object.position.z += this.velocity.z;
 	}
 
 	update() {
@@ -56,11 +57,19 @@ class Marble {
 			aggregate.y += x.y;
 			aggregate.z += x.z;
 		});
-		this.adjustPosition(aggregate);
+		aggregate.scale(this.mass);
+		this.velocity.add(aggregate);
+		this.adjustPosition();
 	}
 
 	getPosition() {
 		return new Vector(this.object.position.x, this.object.position.y, this.object.position.z);
+	}
+
+	setPosition(newPos) {
+		this.object.position.x = newPos.x;
+		this.object.position.y = newPos.y;
+		this.object.position.x = newPos.z;
 	}
 }
 
