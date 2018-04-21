@@ -6,7 +6,7 @@ export default scene => {
     // group.add();
     scene.add(group);
 
-    function update(time) {	
+    function update(time, collidables) {	
     }
 
     return {

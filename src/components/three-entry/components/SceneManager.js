@@ -9,6 +9,8 @@ import Vector from './Vector';
 
 const gravity = new Vector(0, -0.2, 0);
 
+var collidables = []
+
 export default canvas => {
     const clock = new THREE.Clock();
     const origin = new THREE.Vector3(0, 0, 0);
@@ -68,6 +70,9 @@ export default canvas => {
             new SceneSubject(scene),
             new BoxContainer(scene)
         ];
+        
+        // collisions against the container
+        collidables.push(sceneSubjects[2]);
 
         tweets.forEach(tweet => {
             let marble = new Marble(scene, tweet);
@@ -85,7 +90,7 @@ export default canvas => {
         {
             if(sceneSubjects[i].isMarble && sceneSubjects[i].getPosition().y >= -50)
             {
-                sceneSubjects[i].update(elapsedTime);
+                sceneSubjects[i].update(elapsedTime, collidables);
             }
         }
             

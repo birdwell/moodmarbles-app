@@ -1,7 +1,8 @@
 import {
 	SphereGeometry,
 	MeshPhongMaterial,
-	Mesh
+	Mesh,
+	Raycaster
 } from 'three';
 import { getRandomInt } from '../../utils';
 import Vector from './Vector';
@@ -50,7 +51,25 @@ class Marble {
 		this.object.position.z += this.velocity.z;
 	}
 
-	update() {
+	getCollisions(objects) {
+		var _objs = []
+		objects.forEach( x=> {
+			_objs.push(x.object);
+		});
+		for (var vertexIndex = 0; vertexIndex < this.object.geometry.vertices.length; vertexIndex++) {
+			var o_p = this.object.position.clone();
+			var _v = this.object.geometry.vertices[vertexIndex].clone();
+			var g_v = _v.applyMatrix4(this.object.matrix);
+			var d_v = g_v.sub(this.object.position);
+
+			var ray = new Raycaster(o_p, d_v.clone().normalize());
+			var results = ray.intersectObjects(_objs);
+			if(results.length > 0 && results[0].distance < d_v.length()) {
+			}
+		}
+	}
+
+	update(elapsedTime, collidables) {
 		var aggregate = new Vector(0,0,0);
 		this.forces.forEach(x => {
 			aggregate.x += x.x;
@@ -59,6 +78,7 @@ class Marble {
 		});
 		aggregate.scale(this.mass);
 		this.velocity.add(aggregate);
+		this.getCollisions(collidables);
 		this.adjustPosition();
 	}
 
