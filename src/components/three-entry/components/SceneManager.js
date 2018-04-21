@@ -3,6 +3,8 @@ import SceneSubject from './SceneSubject';
 import BoxContainer from './BoxContainer';
 import GeneralLights from './GeneralLights';
 import OrbitControls from 'three-orbitcontrols';
+import Marble from './Marble';
+import tweets from './data/coffee.json';
 
 export default canvas => {
     const clock = new THREE.Clock();
@@ -63,6 +65,11 @@ export default canvas => {
             new SceneSubject(scene),
             new BoxContainer(scene)
         ];
+
+        tweets.forEach(tweet => {
+            let marble = new Marble(scene, tweet);
+            sceneSubjects.push(marble);
+        });
 
         return sceneSubjects;
     }
