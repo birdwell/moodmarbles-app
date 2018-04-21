@@ -115,9 +115,14 @@ export default (canvas, tweets) => {
         mouse.y = y;
     }
 
+    function cleanup() {
+        controls.dispose();
+    }
+
     return {
         update,
         onWindowResize,
-        onMouseMove
+        onMouseMove,
+        cleanup
     };
 };

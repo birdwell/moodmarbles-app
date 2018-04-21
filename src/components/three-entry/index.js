@@ -12,8 +12,13 @@ export default class ThreeContainer extends Component {
             tweets = fallBackTweets;
         }
 
-        threeEntryPoint(this.threeRootElement, tweets);
+        this.threeEntryPoint = threeEntryPoint(this.threeRootElement, tweets);
     }
+
+    componentWillUnmount() {
+        this.threeEntryPoint.cleanup();
+    }
+
     render() {
         return <div style={{ height: '100vh', width: '100%' }} ref={element => (this.threeRootElement = element)} />;
     }

@@ -43,4 +43,12 @@ export default (container, tweets) => {
         requestAnimationFrame(render);
         sceneManager.update();
     }
+
+    function cleanup() {
+        sceneManager.cleanup();
+    }
+
+    return {
+        cleanup
+    };
 };
