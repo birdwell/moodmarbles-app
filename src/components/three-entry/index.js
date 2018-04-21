@@ -5,7 +5,7 @@ import fallBackTweets from './data/coffee.json';
 export default class ThreeContainer extends Component {
     componentDidMount() {
 
-        const tweets = [];
+        let tweets = [];
         const state = this.props.location.state;
         if(state && state.tweets && state.tweets.length > 0) {
             tweets = state.tweet;
