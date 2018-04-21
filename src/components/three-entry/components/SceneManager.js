@@ -12,6 +12,7 @@ const gravity = new Vector(0, -0.2, 0);
 export default canvas => {
     const clock = new THREE.Clock();
     const origin = new THREE.Vector3(0, 0, 0);
+    const mouse = new THREE.Vector2();
 
     const screenDimensions = {
         width: canvas.width,
@@ -105,8 +106,14 @@ export default canvas => {
         renderer.setSize(width, height);
     }
 
+    function onMouseMove(x, y) {
+        mouse.x = x;
+        mouse.y = y;
+    }
+
     return {
         update,
-        onWindowResize
+        onWindowResize,
+        onMouseMove
     };
 };
