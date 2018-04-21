@@ -1,11 +1,16 @@
 import {
-	SphereGeometry,
-	MeshPhongMaterial,
+	IcosahedronGeometry,
+	MeshStandardMaterial,
+	TextureLoader,
+	DoubleSide,
+	NearestFilter,
+	RepeatWrapping,
 	Mesh,
 	Raycaster
 } from 'three';
 import { getRandomInt } from '../../utils';
 import Vector from './Vector';
+import alpha from './alpha.png';
 
 const mood = {
 	sadness: 0xf1c40f,
@@ -16,14 +21,25 @@ const mood = {
 class Marble {
 
 	constructor(scene, tweet) {
-		const sphereGeometry = new SphereGeometry(2, 10, 10);
-		const phongMaterial = new MeshPhongMaterial({
-			color: mood[tweet.emotion]
+		const sphereGeometry = new IcosahedronGeometry(3, 2);
+		const material = new MeshStandardMaterial({
+			color: mood[tweet.emotion],
+			emissiveMap: new TextureLoader().load(alpha),
+			transparent: true,
+			side: DoubleSide,
+			alphaTest: 0.1
 		});
-		this.object = new Mesh(sphereGeometry, phongMaterial);
+
+		let alphaMap = new TextureLoader().load(alpha);
+		material.alphaMap = alphaMap;
+		material.alphaMap.magFilter = NearestFilter;
+		material.alphaMap.wrapT = RepeatWrapping;
+		material.alphaMap.repeat.y = 1;
+
+		this.object = new Mesh(sphereGeometry, material);
 
 		// Initial Position
-		const position = new Vector(getRandomInt(-50, 50), 100, getRandomInt(-50, 50));
+		const position = new Vector(getRandomInt(-50, 50), 0, getRandomInt(-50, 50));
 		this.object.position.x = position.x;
 		this.object.position.y = position.y;
 		this.object.position.z = position.z;
@@ -93,6 +109,8 @@ class Marble {
 		this.velocity.add(aggregate);
 		this.getCollisions(collidables);
 		this.adjustPosition();
+		this.object.material.alphaMap.offset.y = elapsedTime * 0.15;
+
 	}
 
 	getPosition() {
