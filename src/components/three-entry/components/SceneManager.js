@@ -6,6 +6,7 @@ import OrbitControls from 'three-orbitcontrols';
 import Marble from './Marble';
 import tweets from './data/coffee.json';
 import Vector from './Vector';
+import CollisionPlane from './CollisionPlane';
 
 const gravity = new Vector(0, -0.2, 0);
 
@@ -69,11 +70,11 @@ export default canvas => {
         const sceneSubjects = [
             new GeneralLights(scene),
             new SceneSubject(scene),
-            new BoxContainer(scene)
+            new BoxContainer(scene, 100, 100, 100)
         ];
-        
+        const cp = new CollisionPlane(scene, 100, 1, 100);
         // collisions against the container
-        collidables.push(sceneSubjects[2]);
+        collidables.push(cp);
 
         tweets.forEach(tweet => {
             let marble = new Marble(scene, tweet);
@@ -89,10 +90,10 @@ export default canvas => {
 
         for (let i = 0; i < sceneSubjects.length; i++)
         {
-            if(sceneSubjects[i].isMarble && sceneSubjects[i].getPosition().y >= -50)
-            {
+            //if(sceneSubjects[i].isMarble && sceneSubjects[i].getPosition().y >= -50)
+            //{
                 sceneSubjects[i].update(elapsedTime, collidables);
-            }
+            //}
         }
             
 

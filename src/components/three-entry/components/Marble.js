@@ -51,6 +51,17 @@ class Marble {
 		this.object.position.z += this.velocity.z;
 	}
 
+	reflect(obj) {
+		var normal = obj.normal();
+		var _dot = Vector.dot(this.velocity, normal);
+		normal.scale(2*_dot);
+		var result = Vector.subtract(this.velocity, normal);
+		this.velocity.x = result.x;
+		this.velocity.y = result.y;
+		this.velocity.z = result.z;
+		this.velocity.scale(0.8);
+	}
+
 	getCollisions(objects) {
 		var _objs = []
 		objects.forEach( x=> {
@@ -65,6 +76,8 @@ class Marble {
 			var ray = new Raycaster(o_p, d_v.clone().normalize());
 			var results = ray.intersectObjects(_objs);
 			if(results.length > 0 && results[0].distance < d_v.length()) {
+				this.reflect(objects[0]);
+				break;
 			}
 		}
 	}

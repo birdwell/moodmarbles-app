@@ -1,3 +1,6 @@
+
+var math = require('mathjs');
+
 class Vector {
 
     constructor(x, y, z) {
@@ -21,6 +24,40 @@ class Vector {
         this.x += vector.x;
         this.y += vector.y;
         this.z += vector.z;
+    }
+
+    asArray () {
+        return [this.x, this.y, this.z];
+    }
+
+    normalize() {
+        var results = new Vector(this.x, this.y, this.z);
+        results.x /= this.getMagnitude();
+        results.y /= this.getMagnitude();
+        results.z /= this.getMagnitude();
+        return results;
+    }
+
+    static subtract(to, from) {
+        var results = new Vector(0, 0, 0);
+        results.x = from.x - to.x;
+        results.y = from.y - to.y;
+        results.x = from.z - to.z;
+        return results;
+    }
+
+    static cross(one, two) {
+        const oneA = one.asArray();
+        const twoA = two.asArray();
+        var result = math.cross(oneA, twoA);
+        return new Vector(result[0], result[1], result[2]);
+    }
+
+    static dot(one, two) {
+        var x = one.x * two.x;
+        var y = one.y * two.y;
+        var z = one.z * two.z;
+        return x + y + z;
     }
 }
 
