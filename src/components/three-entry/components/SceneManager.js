@@ -7,7 +7,7 @@ import Marble from './Marble';
 import tweets from './data/coffee.json';
 import Vector from './Vector';
 
-const gravity = new Vector(0, -0.5, 0);
+const gravity = new Vector(0, -0.2, 0);
 
 export default canvas => {
     const clock = new THREE.Clock();
