@@ -5,6 +5,9 @@ import GeneralLights from './GeneralLights';
 import OrbitControls from 'three-orbitcontrols';
 import Marble from './Marble';
 import tweets from './data/coffee.json';
+import Vector from './Vector';
+
+const gravity = new Vector(0, -0.5, 0);
 
 export default canvas => {
     const clock = new THREE.Clock();
@@ -68,6 +71,7 @@ export default canvas => {
 
         tweets.forEach(tweet => {
             let marble = new Marble(scene, tweet);
+            marble.addForce(gravity);
             sceneSubjects.push(marble);
         });
 
@@ -78,7 +82,13 @@ export default canvas => {
         const elapsedTime = clock.getElapsedTime();
 
         for (let i = 0; i < sceneSubjects.length; i++)
-            sceneSubjects[i].update(elapsedTime);
+        {
+            if(sceneSubjects[i].isMarble && sceneSubjects[i].getPosition().y >= -50)
+            {
+                sceneSubjects[i].update(elapsedTime);
+            }
+        }
+            
 
         renderer.render(scene, camera);
     }
