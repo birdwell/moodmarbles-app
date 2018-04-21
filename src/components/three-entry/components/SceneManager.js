@@ -56,7 +56,7 @@ export default canvas => {
             aspectRatio,
         );
 
-        camera.position.z = 50;
+        camera.position.z = 200;
         scene.add(camera);
 
         return camera;

@@ -1,18 +1,16 @@
-import * as THREE from 'three';
+import { PointLight } from 'three';
 
 export default scene => {
-    const lightIn = new THREE.PointLight('#4CAF50', 30);
-    const lightOut = new THREE.PointLight('#2196F3', 10);
-    lightOut.position.set(40, 20, 40);
+    const light = new PointLight(0xffffff);
+    light.position.set(-10, 15, 50);
 
-    scene.add(lightIn);
-    scene.add(lightOut);
+    scene.add(light);
 
     const rad = 80;
 
     function update(time) {
         const x = rad * Math.sin(time * 0.2);
-        lightOut.position.x = x;
+        light.position.x = x;
     }
 
     return {
