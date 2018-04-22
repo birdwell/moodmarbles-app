@@ -1,16 +1,15 @@
 import * as THREE from 'three';
-import SceneSubject from './SceneSubject';
-import BoxContainer from './BoxContainer';
+
+import { SceneSubject, BoxContainer, Marble } from '../scene-subjects';
+import { Vector, CollisionPlane } from '../physics';
+
 import GeneralLights from './GeneralLights';
 import OrbitControls from 'three-orbitcontrols';
-import Marble from './Marble';
-import Vector from './Vector';
-import CollisionPlane from './CollisionPlane';
 
 const gravity = new Vector(0, -0.2, 0);
+const collidables = [];
 
-var collidables = []
-export default (canvas, tweets) => {
+export default (canvas, config) => {
     const clock = new THREE.Clock();
     const origin = new THREE.Vector3(0, 0, 0);
     const mouse = new THREE.Vector2();
@@ -74,7 +73,7 @@ export default (canvas, tweets) => {
         // collisions against the container
         collidables.push(cp);
 
-        tweets.forEach(tweet => {
+        config.tweets.forEach(tweet => {
             let marble = new Marble(scene, tweet);
             marble.addForce(gravity);
             sceneSubjects.push(marble);
@@ -85,16 +84,7 @@ export default (canvas, tweets) => {
 
     function update() {
         const elapsedTime = clock.getElapsedTime();
-
-        for (let i = 0; i < sceneSubjects.length; i++)
-        {
-            //if(sceneSubjects[i].isMarble && sceneSubjects[i].getPosition().y >= -50)
-            //{
-                sceneSubjects[i].update(elapsedTime, collidables);
-            //}
-        }
-            
-
+        sceneSubjects.forEach(subject => subject.update(elapsedTime, collidables))
         renderer.render(scene, camera);
     }
 

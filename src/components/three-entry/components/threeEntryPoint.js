@@ -1,8 +1,8 @@
-import SceneManager from './SceneManager';
+import SceneManager from './setup/SceneManager';
 
-export default (container, tweets) => {
+export default (container, config) => {
     const canvas = createCanvas(document, container);
-    const sceneManager = new SceneManager(canvas, tweets);
+    const sceneManager = new SceneManager(canvas, config);
 
     let canvasHalfWidth;
     let canvasHalfHeight;

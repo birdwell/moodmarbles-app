@@ -15,9 +15,10 @@ class Setup extends Component {
 
 	onSubmit = async (e) => {
 		e.preventDefault();
+		const { hashtag, count } = this.state;
 		const tweets = await getTweets(this.state);
 		const { history } = this.props;
-		history.push('/three', { tweets });
+		history.push('/three', { tweets, hashtag, count });
 	}
 
 	render() {

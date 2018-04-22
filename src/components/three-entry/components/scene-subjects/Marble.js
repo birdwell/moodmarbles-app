@@ -1,25 +1,18 @@
 import {
-	IcosahedronGeometry,
-	MeshStandardMaterial,
 	TextureLoader,
-	DoubleSide,
-	NearestFilter,
-	RepeatWrapping,
 	Mesh,
 	Raycaster,
 	SphereGeometry,
-	Texture,
 	ShaderMaterial
 } from 'three';
-import { getRandomInt } from '../../utils';
-import Vector from './Vector';
-import alpha from './alpha.png';
+import { getRandomInt } from '../../../utils';
+import { Vector } from '../physics';
 
-import sadness from './assets/sad.svg';
-import joy from './assets/joy.png';
-import anger from './assets/angry.png';
-import fear from './assets/fear.png';
-import disgust from './assets/disgust.jpg';
+import sadness from '../assets/sad.svg';
+import joy from '../assets/joy.png';
+import anger from '../assets/angry.png';
+import fear from '../assets/fear.png';
+import disgust from '../assets/disgust.jpg';
 
 const mood = {
 	sadness,

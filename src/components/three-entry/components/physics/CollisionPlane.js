@@ -3,18 +3,23 @@ import {
     MeshBasicMaterial,
     MeshPhongMaterial,
 	BoxHelper,
-	Mesh
+    Mesh,
+    TextureLoader
 } from 'three';
-
+import twitter from './twitter.svg';
 import Vector from './Vector';
 
 class CollisionPlane {
     constructor(scene, width, height, depth) {
         const boxGeo = new BoxGeometry(width, height, depth);
-        this.object = new Mesh(boxGeo, new MeshPhongMaterial({
-            color: 0xFF0000
-        }));
+        this.object = new Mesh(
+            boxGeo, 
+            new MeshBasicMaterial({ 
+                map: new TextureLoader().load(twitter)
+            })
+        );
         this.object.position.y = -50;
+        
         scene.add(this.object);
 
         this._n = this.calcNormal();

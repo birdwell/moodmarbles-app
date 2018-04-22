@@ -1,5 +1,5 @@
 
-var math = require('mathjs');
+import math from 'mathjs';
 
 class Vector {
 
@@ -39,7 +39,7 @@ class Vector {
     }
 
     static subtract(to, from) {
-        var results = new Vector(0, 0, 0);
+        const results = new Vector(0, 0, 0);
         results.x = from.x - to.x;
         results.y = from.y - to.y;
         results.x = from.z - to.z;
@@ -49,14 +49,14 @@ class Vector {
     static cross(one, two) {
         const oneA = one.asArray();
         const twoA = two.asArray();
-        var result = math.cross(oneA, twoA);
+        const result = math.cross(oneA, twoA);
         return new Vector(result[0], result[1], result[2]);
     }
 
     static dot(one, two) {
-        var x = one.x * two.x;
-        var y = one.y * two.y;
-        var z = one.z * two.z;
+        const x = one.x * two.x;
+        const y = one.y * two.y;
+        const z = one.z * two.z;
         return x + y + z;
     }
 }

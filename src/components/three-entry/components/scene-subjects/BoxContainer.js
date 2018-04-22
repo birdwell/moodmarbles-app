@@ -5,7 +5,7 @@ import {
 	Mesh
 } from 'three';
 
-import Vector from './Vector';
+import { Vector } from '../physics';
 
 class BoxContainer {
 

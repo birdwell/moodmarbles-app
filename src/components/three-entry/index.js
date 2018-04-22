@@ -2,17 +2,26 @@ import React, { Component } from 'react';
 import threeEntryPoint from './components/threeEntryPoint';
 import fallBackTweets from './data/coffee.json';
 
+import './index.css';
+
 export default class ThreeContainer extends Component {
-    componentDidMount() {
+
+    state = {}
+
+    componentDidMount() {   
         const state = this.props.location.state;
-        let tweets = [];    
+        let config = {};
         if(state && state.tweets && state.tweets.length > 0) {
-            tweets = state.tweets;
+            const { tweets, hashtag, count } = state;
+            config = { tweets, hashtag, count };
         } else {
-            tweets = fallBackTweets;
+            config.tweets = fallBackTweets;
+            config.hashtag = "coffee";
+            config.count = fallBackTweets.length;
         }
 
-        this.threeEntryPoint = threeEntryPoint(this.threeRootElement, tweets);
+        this.threeEntryPoint = threeEntryPoint(this.threeRootElement, config);
+        this.setState({ ...config });
     }
 
     componentWillUnmount() {
@@ -22,6 +31,12 @@ export default class ThreeContainer extends Component {
     }
 
     render() {
-        return <div style={{ height: '100vh', width: '100%' }} ref={element => (this.threeRootElement = element)} />;
+        const { hashtag } = this.state;
+        return (
+            <React.Fragment>
+                <div className="hasttag-header">{hashtag || ''}</div>
+                <div style={{ height: '100vh', width: '100%' }} ref={element => (this.threeRootElement = element)} />
+            </React.Fragment>
+        );
     }
 }
