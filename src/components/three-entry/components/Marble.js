@@ -6,38 +6,45 @@ import {
 	NearestFilter,
 	RepeatWrapping,
 	Mesh,
-	Raycaster
+	Raycaster,
+	SphereGeometry,
+	Texture,
+	ShaderMaterial
 } from 'three';
 import { getRandomInt } from '../../utils';
 import Vector from './Vector';
 import alpha from './alpha.png';
 
+import sadness from './assets/sad.png';
+import joy from './assets/joy.png';
+import anger from './assets/angry.png';
+import fear from './assets/fear.png';
+import disgust from './assets/disgust.jpg';
+
 const mood = {
-	sadness: 0xf1c40f,
-	joy: 0x3498db,
-	anger: 0xe74c3c
+	sadness,
+	joy,
+	anger,
+	fear,
+	disgust
 };
 
 class Marble {
 
 	constructor(scene, tweet) {
-		const sphereGeometry = new IcosahedronGeometry(3, 2);
-		const material = new MeshStandardMaterial({
-			color: mood[tweet.emotion],
-			emissiveMap: new TextureLoader().load(alpha),
-			transparent: true,
-			side: DoubleSide,
-			alphaTest: 0.1
+		const texture = new TextureLoader().load(mood[tweet.emotion]);
+		const geometry = new SphereGeometry(5, 10, 10);
+		const uniforms = {
+			"texture": { type: "t", value: texture }
+		};
+
+		// material
+		const material = new ShaderMaterial({
+			uniforms: uniforms,
+			vertexShader: document.getElementById('vertex_shader').textContent,
+			fragmentShader: document.getElementById('fragment_shader').textContent
 		});
-
-		let alphaMap = new TextureLoader().load(alpha);
-		material.alphaMap = alphaMap;
-		material.alphaMap.magFilter = NearestFilter;
-		material.alphaMap.wrapT = RepeatWrapping;
-		material.alphaMap.repeat.y = 1;
-
-		this.object = new Mesh(sphereGeometry, material);
-
+		this.object = new Mesh(geometry, material);
 		// Initial Position
 		const position = new Vector(getRandomInt(-50, 50), 0, getRandomInt(-50, 50));
 		this.object.position.x = position.x;
@@ -109,8 +116,6 @@ class Marble {
 		this.velocity.add(aggregate);
 		this.getCollisions(collidables);
 		this.adjustPosition();
-		this.object.material.alphaMap.offset.y = elapsedTime * 0.15;
-
 	}
 
 	getPosition() {

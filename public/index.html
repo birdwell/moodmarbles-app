@@ -28,6 +28,34 @@
       You need to enable JavaScript to run this app.
     </noscript>
     <div id="root"></div>
+    <script id="vertex_shader" type="x-shader/x-vertex">
+          varying vec3 vNormal;
+          
+          void main() {
+          
+              vNormal = normal;
+          
+              gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+          
+          }  
+      </script>
+      <script id="fragment_shader" type="x-shader/x-fragment">
+        
+        uniform sampler2D texture;
+        
+        varying vec3 vNormal;
+        
+        void main() {
+        
+          vec2 uv = normalize( vNormal ).xy * 0.5 + 0.5;
+        
+          vec3 color = texture2D( texture, uv ).rgb;
+              
+          gl_FragColor = vec4( color, 1.0 );
+        
+        }
+        
+        </script>
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.

@@ -16,7 +16,9 @@ export default class ThreeContainer extends Component {
     }
 
     componentWillUnmount() {
-        this.threeEntryPoint.cleanup();
+        if (this.threeEntryPoint) {
+            this.threeEntryPoint.cleanup();
+        }
     }
 
     render() {
