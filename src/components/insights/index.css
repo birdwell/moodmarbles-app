@@ -1,0 +1,11 @@
+h3.data-title {
+    text-align: center;
+}
+
+.data {
+    margin: 0px 3rem;
+}
+
+.recharts-polar-angle-axis-tick tspan {
+    font-size: 27px !important; 
+}

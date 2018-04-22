@@ -59,7 +59,7 @@ export default class ThreeContainer extends Component {
 
         return (
             <React.Fragment>
-                <div className="hasttag-header">#{hashtag || ''}</div>
+                <h3 className="hasttag-header">#{hashtag || ''}</h3>
                 {tweets.length > 0 && <Legend onFilter={this.onFilter} filters={filters} tweets={tweets} />}
                 <div style={{ height: '100vh', width: '100%' }} ref={element => (this.threeRootElement = element)} />
                 <div className="timeline-column">

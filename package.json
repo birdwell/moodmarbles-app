@@ -17,6 +17,7 @@
     "react-spinners": "^0.3.2",
     "react-tweet-embed": "^1.1.0",
     "react-twitter-widgets": "^1.7.1",
+    "recharts": "^1.0.0-beta.10",
     "three": "^0.92.0",
     "three-orbitcontrols": "^2.0.0"
   },

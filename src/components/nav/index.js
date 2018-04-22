@@ -12,6 +12,7 @@ class Nav extends Component {
 					<ul className="nav-links">
 						<li><NavLink exact to="/">Choose Hashtag</NavLink></li>
 						<li><NavLink to="/three">Experience</NavLink></li>
+						<li><NavLink to="/insights">Insights</NavLink></li>
 					</ul>
 				</div>
 			</nav>

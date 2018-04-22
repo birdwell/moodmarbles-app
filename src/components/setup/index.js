@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router';
+import { Link } from 'react-router-dom';
 
 import { getTweets, getCachedHashTags } from '../../Api';
 import './index.css';
@@ -31,17 +32,16 @@ class Setup extends Component {
 		this.setState({ isCached: !this.state.isCached });
 	}
 
-	onSubmit = async (e) => {
-		e.preventDefault();
-		const { count, cachedHashTag, isCached } = this.state;
-		const hashtag = isCached ? cachedHashTag : this.state.hashtag;
+	onSubmit = async (path) => {
+		const { count, cachedHashTag, isCached, cachedHashTags } = this.state;
+		const hashtag = isCached ? (cachedHashTag !== '' && cachedHashTag) || cachedHashTags[0] : this.state.hashtag;
 
 		this.setState({ isLoading: true });
 
 		try {
 			const tweets = await getTweets({ hashtag, count });
 			const { history } = this.props;
-			history.push('/three', { tweets, hashtag, count });
+			history.push(path, { tweets, hashtag, count });
 		} catch (error) {
 			this.setState({ isLoading: false, error: 'Unable to get tweets.' });
 		}
@@ -58,7 +58,7 @@ class Setup extends Component {
 					<div className="setup-experience col-lg-6 col-md-8 col-sm-12">
 						<h3 className="setup-header">HashTag Experience</h3>
 						{error != '' && <p className="alert alert-danger">{ error }</p>}
-						<form onSubmit={this.onSubmit}>
+						<div>
 							{!isCached && (
 								<React.Fragment>
 									<div className="form-control">
@@ -90,10 +90,11 @@ class Setup extends Component {
 
 							<div className="form-control">
 								<label htmlFor="count">Count</label>
-								<input value={count} name="count" type="number" min="1" max="50" onChange={this.onChange} />
+								<input value={count} name="count" type="number" min="1" max="100" onChange={this.onChange} />
 							</div>
-							<button className="button-primary-outlined" type="submit">👍 Go</button>
-						</form>
+							<button className="button-primary-outlined" onClick={() => this.onSubmit('/three')}>👍 Go to Experience</button>
+							<button className="button-primary-outlined" onClick={() => this.onSubmit('/insights')}>📊 Go to Insights</button>
+						</div>
 
 					</div>
 				</div>
