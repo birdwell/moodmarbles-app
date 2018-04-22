@@ -1,12 +1,16 @@
 import React, { Component } from 'react';
+
 import threeEntryPoint from './components/threeEntryPoint';
 import fallBackTweets from './data/coffee.json';
 
+import Legend from './legend';
 import './index.css';
 
 export default class ThreeContainer extends Component {
 
-    state = {}
+    state = {
+        tweets: [],
+    }
 
     componentDidMount() {   
         const state = this.props.location.state;
@@ -31,10 +35,11 @@ export default class ThreeContainer extends Component {
     }
 
     render() {
-        const { hashtag } = this.state;
+        const { hashtag, tweets } = this.state;
         return (
             <React.Fragment>
-                <div className="hasttag-header">{hashtag || ''}</div>
+                {tweets.length > 0 && <Legend tweets={tweets} />}
+                <div className="hasttag-header">#{hashtag || ''}</div>
                 <div style={{ height: '100vh', width: '100%' }} ref={element => (this.threeRootElement = element)} />
             </React.Fragment>
         );
