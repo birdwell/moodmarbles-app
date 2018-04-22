@@ -10,6 +10,7 @@ export default class ThreeContainer extends Component {
 
     state = {
         tweets: [],
+        filters: []
     }
 
     componentDidMount() {   
@@ -24,7 +25,7 @@ export default class ThreeContainer extends Component {
             config.count = fallBackTweets.length;
         }
 
-        this.threeEntryPoint = new threeEntryPoint(this.threeRootElement, config);
+        this.threeEntryPoint = threeEntryPoint(this.threeRootElement, config);
         this.setState({ ...config });
     }
 
@@ -34,13 +35,31 @@ export default class ThreeContainer extends Component {
         }
     }
 
+    onFilter = (emotion) => {
+        const { filters, tweets } = this.state;
+
+        if (filters.includes(emotion)) {
+            const newFilters = filters.filter(filter => filter !== emotion);
+            const newTweets = tweets.filter(x => newFilters.includes(x.emotion));
+
+            this.setState({ filters: newFilters });
+            this.threeEntryPoint.updateTweets(newFilters.length === 0 ? tweets : newTweets);
+        } else {
+            const newFilters = [...filters, emotion];
+            const newTweets = tweets.filter(x => newFilters.includes(x.emotion));
+
+            this.setState({ filters: newFilters });
+            this.threeEntryPoint.updateTweets(newTweets);
+        }
+    }
+
     render() {
-        const { hashtag, tweets } = this.state;
+        const { hashtag, tweets, filters } = this.state;
 
         return (
             <React.Fragment>
-                {tweets.length > 0 && <Legend tweets={tweets} />}
                 <div className="hasttag-header">#{hashtag || ''}</div>
+                {tweets.length > 0 && <Legend onFilter={this.onFilter} filters={filters} tweets={tweets} />}
                 <div style={{ height: '100vh', width: '100%' }} ref={element => (this.threeRootElement = element)} />
             </React.Fragment>
         );

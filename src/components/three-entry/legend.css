@@ -7,6 +7,9 @@
 
 .emotion {
     display: flex;
+    cursor: pointer;
+    align-items: center;
+    margin-bottom: 2px;
     justify-content: space-around;
 }
 
@@ -20,5 +23,10 @@
 .emotion-count {
     font-size: 1.5rem;
     text-align: center;
-    flex-grow: 1;
+}
+
+.emotion.active {
+    border: 2px solid #1ea1f2;
+    background: #1ea1f28a;
+    border-radius: 4px;
 }

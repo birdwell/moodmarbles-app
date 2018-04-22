@@ -48,7 +48,12 @@ export default (container, config) => {
         sceneManager.cleanup();
     }
 
+    function updateTweets(tweets) {
+        sceneManager.updateTweets(tweets);
+    }
+
     return {
-        cleanup
+        cleanup,
+        updateTweets
     };
 };

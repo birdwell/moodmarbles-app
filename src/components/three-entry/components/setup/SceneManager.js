@@ -100,6 +100,23 @@ export default class SceneManager {
         this.renderer.render(this.scene, this.camera);
     }
 
+    updateTweets = (tweets) => {
+        this.state = {...this.state, tweets};
+        const oldSubjects = this.sceneSubjects.filter(x => {
+            if (x.isMarble) this.scene.remove(x.object);
+            return !x.isMarble;
+        });
+        const newSubjects = [ ...oldSubjects ];
+
+        tweets.forEach(tweet => {
+            let marble = new Marble(this.scene, tweet);
+            marble.addForce(this.gravity);
+            newSubjects.push(marble);
+        });
+
+        this.sceneSubjects = newSubjects;
+    }
+
     onWindowResize = () => {
         const { width, height } = this.canvas;
 
