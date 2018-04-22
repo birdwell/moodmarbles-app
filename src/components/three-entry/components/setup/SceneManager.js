@@ -24,6 +24,8 @@ export default (canvas, config) => {
     const camera = buildCamera(screenDimensions);
     const sceneSubjects = createSceneSubjects(scene);
     const controls = new OrbitControls(camera);
+    controls.minDistance = 10;
+    controls.maxDistance = 200;
 
     function buildScene() {
         const scene = new THREE.Scene();
