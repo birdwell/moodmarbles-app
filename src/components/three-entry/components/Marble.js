@@ -15,7 +15,7 @@ import { getRandomInt } from '../../utils';
 import Vector from './Vector';
 import alpha from './alpha.png';
 
-import sadness from './assets/sad.png';
+import sadness from './assets/sad.svg';
 import joy from './assets/joy.png';
 import anger from './assets/angry.png';
 import fear from './assets/fear.png';
@@ -45,8 +45,9 @@ class Marble {
 			fragmentShader: document.getElementById('fragment_shader').textContent
 		});
 		this.object = new Mesh(geometry, material);
+
 		// Initial Position
-		const position = new Vector(getRandomInt(-50, 50), 0, getRandomInt(-50, 50));
+		const position = new Vector(getRandomInt(-50, 50), 50, getRandomInt(-50, 50));
 		this.object.position.x = position.x;
 		this.object.position.y = position.y;
 		this.object.position.z = position.z;
@@ -75,10 +76,11 @@ class Marble {
 	}
 
 	reflect(obj) {
-		var normal = obj.normal();
-		var _dot = Vector.dot(this.velocity, normal);
+		const normal = obj.normal();
+		const _dot = Vector.dot(this.velocity, normal);
 		normal.scale(2*_dot);
-		var result = Vector.subtract(this.velocity, normal);
+		const result = Vector.subtract(this.velocity, normal);
+
 		this.velocity.x = result.x;
 		this.velocity.y = result.y;
 		this.velocity.z = result.z;
@@ -86,18 +88,18 @@ class Marble {
 	}
 
 	getCollisions(objects) {
-		var _objs = []
+		const _objs = []
 		objects.forEach( x=> {
 			_objs.push(x.object);
 		});
-		for (var vertexIndex = 0; vertexIndex < this.object.geometry.vertices.length; vertexIndex++) {
-			var o_p = this.object.position.clone();
-			var _v = this.object.geometry.vertices[vertexIndex].clone();
-			var g_v = _v.applyMatrix4(this.object.matrix);
-			var d_v = g_v.sub(this.object.position);
+		for (let vertexIndex = 0; vertexIndex < this.object.geometry.vertices.length; vertexIndex++) {
+			const o_p = this.object.position.clone();
+			const _v = this.object.geometry.vertices[vertexIndex].clone();
+			const g_v = _v.applyMatrix4(this.object.matrix);
+			const d_v = g_v.sub(this.object.position);
 
-			var ray = new Raycaster(o_p, d_v.clone().normalize());
-			var results = ray.intersectObjects(_objs);
+			const ray = new Raycaster(o_p, d_v.clone().normalize());
+			const results = ray.intersectObjects(_objs);
 			if(results.length > 0 && results[0].distance < d_v.length()) {
 				this.reflect(objects[0]);
 				break;
@@ -106,7 +108,7 @@ class Marble {
 	}
 
 	update(elapsedTime, collidables) {
-		var aggregate = new Vector(0,0,0);
+		const aggregate = new Vector(0,0,0);
 		this.forces.forEach(x => {
 			aggregate.x += x.x;
 			aggregate.y += x.y;
