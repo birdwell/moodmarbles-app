@@ -17,3 +17,9 @@ input[type="number"] {
 .setup-experience {
 	margin: auto;
 }
+
+.choose-cached {
+    text-align: center;
+    color: #4caf4f;
+    cursor: pointer;
+}
