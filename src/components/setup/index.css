@@ -23,3 +23,20 @@ input[type="number"] {
     color: #4caf4f;
     cursor: pointer;
 }
+
+.loading-spinner {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    position: absolute;
+    top: 60px;
+    background: #d4d4d45e;
+    height: 100%;
+    padding-top: 3rem;
+    flex-direction: column;
+    align-items: center;
+}
+
+h4.loading-header {
+    text-align: center;
+}

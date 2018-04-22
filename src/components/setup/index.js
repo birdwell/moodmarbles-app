@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router';
+
 import { getTweets, getCachedHashTags } from '../../Api';
 import './index.css';
+import Loading from './loading';
 
 class Setup extends Component {
 	state = { 
@@ -9,7 +11,8 @@ class Setup extends Component {
 		hashtag: '',
 		cachedHashTags: [],
 		cachedHashTag: '',
-		isCached: false
+		isCached: false,
+		isLoading: false
 	}
 
 	componentDidMount = () => {
@@ -20,7 +23,6 @@ class Setup extends Component {
 	}
 	
 	onChange = ({ target: { name, value }}) => {
-		debugger;
 		this.setState({ [name]: value });
 	}
 
@@ -32,6 +34,9 @@ class Setup extends Component {
 		e.preventDefault();
 		const { count, cachedHashTag, isCached } = this.state;
 		const hashtag = isCached ? cachedHashTag : this.state.hashtag;
+
+		this.setState({ isLoading: true });
+
 		const tweets = await getTweets({
 			hashtag,
 			count
@@ -44,47 +49,51 @@ class Setup extends Component {
 		const { count, hashtag, isCached, cachedHashTag, cachedHashTags } = this.state;
 
 		return (
-			<div className="row">
-				<div className="setup-experience col-lg-6 col-md-8 col-sm-12">
-					<h3 className="setup-header">Mood Marbles Experience</h3>
-					<form onSubmit={this.onSubmit}>
-						{!isCached && (
-							<React.Fragment>
-								<div className="form-control">
-									<label htmlFor="hashtag">Hashtags</label>
-									<input value={hashtag} name="hashtag" onChange={this.onChange} type="text" />
+			<React.Fragment>
+				<div className="row">
+					<div className="setup-experience col-lg-6 col-md-8 col-sm-12">
+						<h3 className="setup-header">HashTag Experience</h3>
+						<form onSubmit={this.onSubmit}>
+							{!isCached && (
+								<React.Fragment>
+									<div className="form-control">
+										<label htmlFor="hashtag">Hashtags</label>
+										<input value={hashtag} name="hashtag" onChange={this.onChange} type="text" />
+									</div>
+									<div className="choose-cached" onClick={this.toggleCached}>
+										Choose from cached hashtags (🏎️)
 								</div>
-								<div className="choose-cached" onClick={this.toggleCached}>
-									Choose from cached hashtags (faster)
+								</React.Fragment>
+							)}
+							{isCached && (
+								<React.Fragment>
+									<div className="form-control">
+										<label>Cached Hashtags</label>
+										<select value={cachedHashTag} name="cachedHashTag" onChange={this.onChange}>
+											{
+												cachedHashTags.map(cachedTag =>
+													(<option key={cachedTag} value={cachedTag}>{cachedTag}</option>)
+												)
+											}
+										</select>
+									</div>
+									<div className="choose-cached" onClick={this.toggleCached}>
+										Choose a hashtag (🐌)
 								</div>
-							</React.Fragment>
-						)}
-						{isCached && (
-							<React.Fragment>
-								<div className="form-control">
-									<label>Cached Hashtags</label>
-									<select value={cachedHashTag} name="cachedHashTag" onChange={this.onChange}>
-										{
-											cachedHashTags.map(cachedTag => 
-												(<option key={cachedTag} value={cachedTag}>{cachedTag}</option>)
-											)
-										}
-									</select>
-								</div>
-								<div className="choose-cached" onClick={this.toggleCached}>
-									Choose a hashtag (slower)
-								</div>
-							</React.Fragment>
-						)}
-					
-						<div className="form-control">
-							<label htmlFor="count">Count</label>
-							<input value={count} name="count" type="number" min="1" max="50" onChange={this.onChange} />
-						</div>
-						<button className="button-primary-outlined" type="submit">Start Experience</button>
-					</form>
+								</React.Fragment>
+							)}
+
+							<div className="form-control">
+								<label htmlFor="count">Count</label>
+								<input value={count} name="count" type="number" min="1" max="50" onChange={this.onChange} />
+							</div>
+							<button className="button-primary-outlined" type="submit">👍 Go</button>
+						</form>
+
+					</div>
 				</div>
-			</div>
+				<Loading isLoading={this.state.isLoading} />
+			</React.Fragment>
 		);
 	}
 }
