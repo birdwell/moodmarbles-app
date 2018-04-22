@@ -12,7 +12,8 @@ class Setup extends Component {
 		cachedHashTags: [],
 		cachedHashTag: '',
 		isCached: false,
-		isLoading: false
+		isLoading: false,
+		error: ''
 	}
 
 	componentDidMount = () => {
@@ -23,7 +24,7 @@ class Setup extends Component {
 	}
 	
 	onChange = ({ target: { name, value }}) => {
-		this.setState({ [name]: value });
+		this.setState({ [name]: value, error: '' });
 	}
 
 	toggleCached = () => {
@@ -37,22 +38,26 @@ class Setup extends Component {
 
 		this.setState({ isLoading: true });
 
-		const tweets = await getTweets({
-			hashtag,
-			count
-		});
-		const { history } = this.props;
-		history.push('/three', { tweets, hashtag, count });
+		try {
+			const tweets = await getTweets({ hashtag, count });
+			const { history } = this.props;
+			history.push('/three', { tweets, hashtag, count });
+		} catch (error) {
+			this.setState({ isLoading: false, error: 'Unable to get tweets.' });
+		}
+
+
 	}
 
 	render() {
-		const { count, hashtag, isCached, cachedHashTag, cachedHashTags } = this.state;
+		const { count, hashtag, isCached, cachedHashTag, cachedHashTags, error } = this.state;
 
 		return (
 			<React.Fragment>
 				<div className="row">
 					<div className="setup-experience col-lg-6 col-md-8 col-sm-12">
 						<h3 className="setup-header">HashTag Experience</h3>
+						{error != '' && <p className="alert alert-danger">{ error }</p>}
 						<form onSubmit={this.onSubmit}>
 							{!isCached && (
 								<React.Fragment>

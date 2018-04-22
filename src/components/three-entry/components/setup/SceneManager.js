@@ -25,7 +25,7 @@ export default class SceneManager {
         this.renderer = this.buildRender(this.screenDimensions);
         this.camera = this.buildCamera(this.screenDimensions);
         this.sceneSubjects = this.createSceneSubjects(this.scene);
-        this.controls = new OrbitControls(this.camera);
+        this.controls = new OrbitControls(this.camera, canvas);
 
         this.scene.add(this.camera);
         this.controls.minDistance = 10;

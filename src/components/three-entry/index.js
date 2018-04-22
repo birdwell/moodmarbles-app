@@ -1,16 +1,17 @@
 import React, { Component } from 'react';
-
 import threeEntryPoint from './components/threeEntryPoint';
 import fallBackTweets from './data/coffee.json';
 
 import Legend from './legend';
 import './index.css';
+import Tweet from './tweet';
 
 export default class ThreeContainer extends Component {
 
     state = {
         tweets: [],
-        filters: []
+        filters: [],
+        filteredTweets: []
     }
 
     componentDidMount() {   
@@ -42,25 +43,32 @@ export default class ThreeContainer extends Component {
             const newFilters = filters.filter(filter => filter !== emotion);
             const newTweets = tweets.filter(x => newFilters.includes(x.emotion));
 
-            this.setState({ filters: newFilters });
+            this.setState({ filters: newFilters, filteredTweets: newTweets });
             this.threeEntryPoint.updateTweets(newFilters.length === 0 ? tweets : newTweets);
         } else {
             const newFilters = [...filters, emotion];
             const newTweets = tweets.filter(x => newFilters.includes(x.emotion));
 
-            this.setState({ filters: newFilters });
+            this.setState({ filters: newFilters, filteredTweets: newTweets });
             this.threeEntryPoint.updateTweets(newTweets);
         }
     }
 
     render() {
-        const { hashtag, tweets, filters } = this.state;
+        const { hashtag, tweets, filters, filteredTweets } = this.state;
 
         return (
             <React.Fragment>
                 <div className="hasttag-header">#{hashtag || ''}</div>
                 {tweets.length > 0 && <Legend onFilter={this.onFilter} filters={filters} tweets={tweets} />}
                 <div style={{ height: '100vh', width: '100%' }} ref={element => (this.threeRootElement = element)} />
+                <div className="timeline-column">
+                    {
+                        filteredTweets
+                            .filter(x => !!x.tweet.id)
+                            .map(tweet => <Tweet key={tweet.tweet.id} tweet={tweet} />)
+                    }
+                </div>
             </React.Fragment>
         );
     }
