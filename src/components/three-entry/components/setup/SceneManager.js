@@ -6,37 +6,46 @@ import { Vector, CollisionPlane } from '../physics';
 import GeneralLights from './GeneralLights';
 import OrbitControls from 'three-orbitcontrols';
 
-const gravity = new Vector(0, -0.2, 0);
-const collidables = [];
+export default class SceneManager {
 
-export default (canvas, config) => {
-    const clock = new THREE.Clock();
-    const origin = new THREE.Vector3(0, 0, 0);
-    const mouse = new THREE.Vector2();
+    constructor(canvas, config) {
+        this.clock = new THREE.Clock();
+        this.origin = new THREE.Vector3(0, 0, 0);
+        this.mouse = new THREE.Vector2();
+        this.state = config;
+        this.canvas = canvas;
+        this.gravity = new Vector(0, -0.2, 0);
+        this.collidables = [];
+        this.screenDimensions = {
+            width: canvas.width,
+            height: canvas.height
+        };
 
-    const screenDimensions = {
-        width: canvas.width,
-        height: canvas.height
-    };
+        this.scene = this.buildScene();
+        this.renderer = this.buildRender(this.screenDimensions);
+        this.camera = this.buildCamera(this.screenDimensions);
+        this.sceneSubjects = this.createSceneSubjects(this.scene);
+        this.controls = new OrbitControls(this.camera);
 
-    const scene = buildScene();
-    const renderer = buildRender(screenDimensions);
-    const camera = buildCamera(screenDimensions);
-    const sceneSubjects = createSceneSubjects(scene);
-    const controls = new OrbitControls(camera);
-    controls.minDistance = 10;
-    controls.maxDistance = 200;
+        this.scene.add(this.camera);
+        this.controls.minDistance = 10;
+        this.controls.maxDistance = 200;
+    }
 
-    function buildScene() {
+    /**
+     * Building Methods
+     */
+
+    buildScene() {
         const scene = new THREE.Scene();
         scene.background = new THREE.Color('#FFF');
 
         return scene;
     }
 
-    function buildRender({ width, height }) {
+    buildRender({ width, height }) {
         const renderer = new THREE.WebGLRenderer({
-            canvas: canvas,
+            canvas: this.canvas,
             antialias: true,
             alpha: true
         });
@@ -50,7 +59,7 @@ export default (canvas, config) => {
         return renderer;
     }
 
-    function buildCamera({ width, height }) {
+    buildCamera({ width, height }) {
         const aspectRatio = width / height;
         const fieldOfView = 60;
 
@@ -60,61 +69,54 @@ export default (canvas, config) => {
         );
 
         camera.position.z = 200;
-        scene.add(camera);
-
         return camera;
     }
 
-    function createSceneSubjects(scene) {
+    createSceneSubjects = (scene) => {
         const sceneSubjects = [
             new GeneralLights(scene),
             new SceneSubject(scene),
             new BoxContainer(scene, 100, 100, 100)
         ];
         const cp = new CollisionPlane(scene, 100, 1, 100);
-        // collisions against the container
-        collidables.push(cp);
 
-        config.tweets.forEach(tweet => {
+        // collisions against the container
+        this.collidables.push(cp);
+
+        this.state.tweets.forEach(tweet => {
             let marble = new Marble(scene, tweet);
-            marble.addForce(gravity);
+            marble.addForce(this.gravity);
             sceneSubjects.push(marble);
         });
 
         return sceneSubjects;
     }
 
-    function update() {
-        const elapsedTime = clock.getElapsedTime();
-        sceneSubjects.forEach(subject => subject.update(elapsedTime, collidables))
-        renderer.render(scene, camera);
+    // -------------------------------
+
+    update = () => {
+        const elapsedTime = this.clock.getElapsedTime();
+        this.sceneSubjects.forEach(subject => subject.update(elapsedTime, this.collidables))
+        this.renderer.render(this.scene, this.camera);
     }
 
-    function onWindowResize() {
-        const { width, height } = canvas;
+    onWindowResize = () => {
+        const { width, height } = this.canvas;
 
-        screenDimensions.width = width;
-        screenDimensions.height = height;
+        this.screenDimensions.width = width;
+        this.screenDimensions.height = height;
 
-        camera.aspect = width / height;
-        camera.updateProjectionMatrix();
+        this.camera.aspect = width / height;
+        this.camera.updateProjectionMatrix();
 
-        renderer.setSize(width, height);
+        this.renderer.setSize(width, height);
     }
 
-    function onMouseMove(x, y) {
-        mouse.x = x;
-        mouse.y = y;
+    onMouseMove = (x, y) => {
+        this.mouse.set(x,y);
     }
 
-    function cleanup() {
-        controls.dispose();
+    cleanup = () => {
+        this.controls.dispose();
     }
-
-    return {
-        update,
-        onWindowResize,
-        onMouseMove,
-        cleanup
-    };
 };

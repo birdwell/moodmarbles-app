@@ -24,7 +24,7 @@ export default class ThreeContainer extends Component {
             config.count = fallBackTweets.length;
         }
 
-        this.threeEntryPoint = threeEntryPoint(this.threeRootElement, config);
+        this.threeEntryPoint = new threeEntryPoint(this.threeRootElement, config);
         this.setState({ ...config });
     }
 
@@ -36,6 +36,7 @@ export default class ThreeContainer extends Component {
 
     render() {
         const { hashtag, tweets } = this.state;
+
         return (
             <React.Fragment>
                 {tweets.length > 0 && <Legend tweets={tweets} />}
