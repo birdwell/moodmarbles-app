@@ -14,7 +14,7 @@ export default class SceneManager {
         this.mouse = new THREE.Vector2();
         this.state = config;
         this.canvas = canvas;
-        this.gravity = new Vector(0, -0.2, 0);
+        this.gravity = new Vector(0, -0.1, 0);
         this.collidables = [];
         this.screenDimensions = {
             width: canvas.width,
