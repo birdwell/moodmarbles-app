@@ -4,6 +4,7 @@ import {
 	PolarAngleAxis, PolarRadiusAxis
 } from 'recharts';
 import coffee from '../three-entry/data/coffee.json';
+import ReachMag from './charts/reach-mag';
 import './index.css';
 
 const getCount = (tweets, emotion) => tweets.filter(x => x.emotion === emotion).length;
@@ -28,13 +29,15 @@ class Insights extends Component {
 		return (
 			<div className="data">
 				<h3 className="data-title">#{hashtag}</h3>
-				<h4>Tweets by Emotions</h4>
-				<RadarChart width={500} height={500} data={data}>
-					<PolarGrid />
-					<PolarAngleAxis dataKey="emotion" />
-					<PolarRadiusAxis angle={18} domain={[0, fullMark]} />
-					<Radar name={hashtag} dataKey="A" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6} />
-				</RadarChart>
+				<div className="tweet-charts">
+					<RadarChart width={500} height={500} data={data}>
+						<PolarGrid />
+						<PolarAngleAxis dataKey="emotion" />
+						<PolarRadiusAxis angle={18} domain={[0, fullMark]} />
+						<Radar name={hashtag} dataKey="A" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6} />
+					</RadarChart>
+					<ReachMag tweets={tweets} />
+				</div>
 			</div>
 		);
 	}
