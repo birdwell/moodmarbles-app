@@ -65,7 +65,7 @@ export default class ThreeContainer extends Component {
                 <div className="timeline-column">
                     {
                         filteredTweets
-                            .filter(x => !!x.tweet.id)
+                            .filter(x => x.tweet ? !!x.tweet.id : false)
                             .map(tweet => <Tweet key={tweet.tweet.id} tweet={tweet} />)
                     }
                 </div>
