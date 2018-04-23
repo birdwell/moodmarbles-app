@@ -38,6 +38,12 @@ class Vector {
         return results;
     }
 
+    becomeZero() {
+        this.x = 0;
+        this.y = 0;
+        this.z = 0;
+    }
+
     static subtract(to, from) {
         const results = new Vector(0, 0, 0);
         results.x = from.x - to.x;

@@ -7,6 +7,7 @@ import {
 } from 'three';
 import { getRandomInt } from '../../../utils';
 import { Vector } from '../physics';
+import { variance } from '../../../utils';
 
 import sadness from '../assets/sad.svg';
 import joy from '../assets/joy.png';
@@ -26,7 +27,8 @@ class Marble {
 
 	constructor(scene, tweet) {
 		const texture = new TextureLoader().load(mood[tweet.emotion]);
-		const geometry = new SphereGeometry(5, 10, 10);
+		const radius = tweet.magnitude * 10;
+		const geometry = new SphereGeometry(radius, 10, 10);
 		const uniforms = {
 			"texture": { type: "t", value: texture }
 		};
@@ -40,12 +42,13 @@ class Marble {
 		this.object = new Mesh(geometry, material);
 
 		// Initial Position
-		const position = new Vector(getRandomInt(-50, 50), 50, getRandomInt(-50, 50));
+		const position = new Vector(getRandomInt(-50, 50), 200, getRandomInt(-50, 50));
 		this.object.position.x = position.x;
 		this.object.position.y = position.y;
 		this.object.position.z = position.z;
 
 		this.velocity = new Vector(0, 0, 0);
+		this.past_positions = [];
 
 		// Give object a mass
 		this.mass = tweet.magnitude;
@@ -109,6 +112,14 @@ class Marble {
 		});
 		aggregate.scale(this.mass);
 		this.velocity.add(aggregate);
+		this.past_positions.push(Math.abs(this.getPosition().getMagnitude()));
+		if(this.past_positions.length > 60) {
+			this.past_positions.shift();
+		}
+		var change = variance(this.past_positions);
+		if(change < 0.15 && this.past_positions.length == 60) {
+			this.velocity.becomeZero();
+		}
 		this.getCollisions(collidables);
 		this.adjustPosition();
 	}
