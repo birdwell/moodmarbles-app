@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import './legend.css';
 
-import sadness from './components/assets/sad.svg';
+import sadness from './components/assets/sad.png';
 import joy from './components/assets/joy.png';
 import anger from './components/assets/angry.png';
 import fear from './components/assets/fear.png';

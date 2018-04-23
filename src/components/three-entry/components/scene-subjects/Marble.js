@@ -9,7 +9,7 @@ import { getRandomInt } from '../../../utils';
 import { Vector } from '../physics';
 import { variance } from '../../../utils';
 
-import sadness from '../assets/sad.svg';
+import sadness from '../assets/sad.png';
 import joy from '../assets/joy.png';
 import anger from '../assets/angry.png';
 import fear from '../assets/fear.png';
