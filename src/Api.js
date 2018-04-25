@@ -5,14 +5,14 @@ export const getTweets = async ({ hashtag, count = 15} ) => {
 	const query = queryString.stringify({ hashtag, count });
 	const response = await fetch('/twitter/tweets?' + query);
 	const tweets = await response.json();
-	return tweets;
+	return tweets.filter(x => x.magnitude > 0);
 };
 
 export const getCachedHashTags = async () => {
 	try {
 		const response = await fetch('/twitter/cached');
 		const cachedHashTags = await response.json();
-		return cachedHashTags;
+		return cachedHashTags.filter(x => x.magnitude > 0);
 	} catch (error) {
 		return error.message || 'Unable to get tweets';
 	}
