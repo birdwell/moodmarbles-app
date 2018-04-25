@@ -12,7 +12,7 @@ export const getCachedHashTags = async () => {
 	try {
 		const response = await fetch('/twitter/cached');
 		const cachedHashTags = await response.json();
-		return cachedHashTags.filter(x => x.magnitude > 0);
+		return cachedHashTags;
 	} catch (error) {
 		return error.message || 'Unable to get tweets';
 	}

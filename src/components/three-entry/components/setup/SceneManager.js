@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import { Clock, Vector3, Vector2, Scene, Color, WebGLRenderer, PerspectiveCamera } from 'three';
 
 import { SceneSubject, BoxContainer, Marble } from '../scene-subjects';
 import { Vector, CollisionPlane } from '../physics';
@@ -9,9 +9,9 @@ import OrbitControls from 'three-orbitcontrols';
 export default class SceneManager {
 
     constructor(canvas, config) {
-        this.clock = new THREE.Clock();
-        this.origin = new THREE.Vector3(0, 0, 0);
-        this.mouse = new THREE.Vector2();
+        this.clock = new Clock();
+        this.origin = new Vector3(0, 0, 0);
+        this.mouse = new Vector2();
         this.state = config;
         this.canvas = canvas;
         this.gravity = new Vector(0, -0.1, 0);
@@ -37,14 +37,14 @@ export default class SceneManager {
      */
 
     buildScene() {
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color('#FFF');
+        const scene = new Scene();
+        scene.background = new Color('#FFF');
 
         return scene;
     }
 
     buildRender({ width, height }) {
-        const renderer = new THREE.WebGLRenderer({
+        const renderer = new WebGLRenderer({
             canvas: this.canvas,
             antialias: true,
             alpha: true
@@ -63,7 +63,7 @@ export default class SceneManager {
         const aspectRatio = width / height;
         const fieldOfView = 60;
 
-        const camera = new THREE.PerspectiveCamera(
+        const camera = new PerspectiveCamera(
             fieldOfView,
             aspectRatio,
         );
@@ -103,7 +103,6 @@ export default class SceneManager {
     updateTweets = (tweets) => {
         this.state = {...this.state, tweets};
         const oldSubjects = this.sceneSubjects.filter(x => {
-            debugger;
             if (x.isMarble) this.scene.remove(x.marble);
             return !x.isMarble;
         });
