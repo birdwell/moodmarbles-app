@@ -1,6 +1,6 @@
 import { PointLight } from 'three';
 
-export default scene => {
+export default (scene) => {
     const light = new PointLight(0xffffff);
     light.position.set(-10, 15, 50);
 

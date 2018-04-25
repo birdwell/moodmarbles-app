@@ -10,10 +10,10 @@ export default (container, config) => {
     bindEventListeners();
     render();
 
-    function createCanvas(document, container) {
-        const canvas = document.createElement('canvas');
-        container.appendChild(canvas);
-        return canvas;
+    function createCanvas(document, c) {
+        const newCanvas = document.createElement('canvas');
+        c.appendChild(newCanvas);
+        return newCanvas;
     }
 
     function bindEventListeners() {

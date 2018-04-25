@@ -2,7 +2,10 @@ module.exports = {
     "extends": "airbnb",
     "parser": "babel-eslint",
     "globals": {
-        "document": true
+        "document": true,
+        "fetch": true,
+        "window": true,
+        "requestAnimationFrame": true
     },
     "rules": {
         "strict": 0,
@@ -24,6 +27,11 @@ module.exports = {
         "no-param-reassign": "off",
         "jsx-a11y/anchor-is-valid": "off",
         "experimentalDecorators": "off",
-        "object-curly-newline": "off"
+        "object-curly-newline": "off",
+        "jsx-a11y/no-static-element-interactions": "off",
+        "jsx-a11y/click-events-have-key-events": "off",
+        "react/jsx-indent-props": "off",
+        "no-underscore-dangle": "off",
+        "no-underscore-dangle": "off"
     }
 };

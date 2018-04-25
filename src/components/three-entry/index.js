@@ -62,7 +62,7 @@ export default class ThreeContainer extends Component {
                 {tweets.length > 0 && (
                     <Legend onFilter={this.onFilter} filters={filters} tweets={tweets} />
                 )}
-                <div style={{ height: '100vh', width: '100%' }} ref={element => (this.threeRootElement = element)} />
+                <div style={{ height: '100vh', width: '100%' }} ref={(element) => { this.threeRootElement = element; }} />
                 <div className="timeline-column">
                     {
                         filteredTweets

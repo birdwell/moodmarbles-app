@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import cx from 'classnames';
 
 import './legend.css';
@@ -19,7 +20,7 @@ const mood = {
 
 const Legend = ({ tweets, onFilter, filters }) => {
 	const emotions = { joy: 0, sadness: 0, anger: 0, fear: 0, disgust: 0 };
-	tweets.forEach(tweet => emotions[tweet.emotion] += 1);
+	tweets.forEach((tweet) => { emotions[tweet.emotion] += 1; });
 	return (
 		<div className="legend">
 			{
@@ -39,6 +40,14 @@ const Legend = ({ tweets, onFilter, filters }) => {
 			}
 		</div>
 	);
+};
+
+Legend.propTypes = {
+	tweets: PropTypes.shape({
+		emotion: PropTypes.string.isRequired
+	}).isRequired,
+	onFilter: PropTypes.func.isRequired,
+	filters: PropTypes.array.isRequired
 };
 
 export default Legend;

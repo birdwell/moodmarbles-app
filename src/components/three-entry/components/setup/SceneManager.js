@@ -1,13 +1,13 @@
 import { Clock, Vector3, Vector2, Scene, Color, WebGLRenderer, PerspectiveCamera } from 'three';
+import OrbitControls from 'three-orbitcontrols';
 
 import { SceneSubject, BoxContainer, Marble } from '../scene-subjects';
 import { Vector, CollisionPlane } from '../physics';
 
 import GeneralLights from './GeneralLights';
-import OrbitControls from 'three-orbitcontrols';
+
 
 export default class SceneManager {
-
     constructor(canvas, config) {
         this.clock = new Clock();
         this.origin = new Vector3(0, 0, 0);
@@ -83,8 +83,8 @@ export default class SceneManager {
         // collisions against the container
         this.collidables.push(cp);
 
-        this.state.tweets.forEach(tweet => {
-            let marble = new Marble(scene, tweet);
+        this.state.tweets.forEach((tweet) => {
+            const marble = new Marble(scene, tweet);
             marble.addForce(this.gravity);
             sceneSubjects.push(marble);
         });
@@ -96,20 +96,20 @@ export default class SceneManager {
 
     update = () => {
         const elapsedTime = this.clock.getElapsedTime();
-        this.sceneSubjects.forEach(subject => subject.update(elapsedTime, this.collidables))
+        this.sceneSubjects.forEach(subject => subject.update(elapsedTime, this.collidables));
         this.renderer.render(this.scene, this.camera);
     }
 
     updateTweets = (tweets) => {
-        this.state = {...this.state, tweets};
-        const oldSubjects = this.sceneSubjects.filter(x => {
+        this.state = { ...this.state, tweets };
+        const oldSubjects = this.sceneSubjects.filter((x) => {
             if (x.isMarble) this.scene.remove(x.marble);
             return !x.isMarble;
         });
-        const newSubjects = [ ...oldSubjects ];
+        const newSubjects = [...oldSubjects];
 
-        tweets.forEach(tweet => {
-            let marble = new Marble(this.scene, tweet);
+        tweets.forEach((tweet) => {
+            const marble = new Marble(this.scene, tweet);
             marble.addForce(this.gravity);
             newSubjects.push(marble);
         });
@@ -130,10 +130,10 @@ export default class SceneManager {
     }
 
     onMouseMove = (x, y) => {
-        this.mouse.set(x,y);
+        this.mouse.set(x, y);
     }
 
     cleanup = () => {
         this.controls.dispose();
     }
-};
+}
