@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-	Radar, RadarChart, PolarGrid, Legend,
+	Radar, RadarChart, PolarGrid,
 	PolarAngleAxis, PolarRadiusAxis
 } from 'recharts';
 import coffee from '../three-entry/data/coffee.json';

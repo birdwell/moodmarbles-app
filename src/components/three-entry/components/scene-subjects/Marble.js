@@ -127,7 +127,7 @@ export default (scene, tweet) => {
             past_positions.shift();
         }
         var change = variance(past_positions);
-        if (change < 0.15 && past_positions.length == 60) {
+        if (change < 0.15 && past_positions.length === 60) {
             velocity.becomeZero();
         }
         getCollisions(collidables);

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router';
-import { Link } from 'react-router-dom';
 
 import { getTweets, getCachedHashTags } from '../../Api';
 import './index.css';
@@ -57,7 +56,7 @@ class Setup extends Component {
 				<div className="row">
 					<div className="setup-experience col-lg-6 col-md-8 col-sm-12">
 						<h3 className="setup-header">HashTag Experience</h3>
-						{error != '' && <p className="alert alert-danger">{ error }</p>}
+						{error !== '' && <p className="alert alert-danger">{ error }</p>}
 						<div>
 							{!isCached && (
 								<React.Fragment>
@@ -66,7 +65,7 @@ class Setup extends Component {
 										<input value={hashtag} name="hashtag" onChange={this.onChange} type="text" />
 									</div>
 									<div className="choose-cached" onClick={this.toggleCached}>
-										Choose from cached hashtags (🏎️)
+										Choose from cached hashtags (<span role="img"  aria-label="race car" >🏎️</span>)
 								</div>
 								</React.Fragment>
 							)}
@@ -83,7 +82,7 @@ class Setup extends Component {
 										</select>
 									</div>
 									<div className="choose-cached" onClick={this.toggleCached}>
-										Choose a hashtag (🐌)
+										Choose a hashtag (<span role="img"  aria-label="snail">🐌</span>)
 								</div>
 								</React.Fragment>
 							)}
@@ -92,8 +91,8 @@ class Setup extends Component {
 								<label htmlFor="count">Count</label>
 								<input value={count} name="count" type="number" min="1" max="100" onChange={this.onChange} />
 							</div>
-							<button className="button-primary-outlined" onClick={() => this.onSubmit('/three')}>👍 Go to Experience</button>
-							<button className="button-primary-outlined" onClick={() => this.onSubmit('/insights')}>📊 Go to Insights</button>
+							<button className="button-primary-outlined" onClick={() => this.onSubmit('/three')}><span role="img" aria-label="thumbs-up">👍</span> Go to Experience</button>
+							<button className="button-primary-outlined" onClick={() => this.onSubmit('/insights')}><span role="img" aria-label="chart">📊</span> Go to Insights</button>
 						</div>
 
 					</div>

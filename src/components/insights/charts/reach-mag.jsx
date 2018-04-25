@@ -1,7 +1,6 @@
 import React from 'react';
-import { ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Label } from 'recharts';
+import { ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, Label } from 'recharts';
 import ScatterLabel from './scatter-label';
-import { ScaleLoader } from 'react-spinners';
 
 const getData = (tweets, emotion) => {
 	return tweets.filter(x => x.emotion === emotion)

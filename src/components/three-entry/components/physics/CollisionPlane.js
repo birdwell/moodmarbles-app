@@ -1,8 +1,6 @@
 import {
     BoxGeometry,
     MeshBasicMaterial,
-    MeshPhongMaterial,
-	BoxHelper,
     Mesh,
     TextureLoader
 } from 'three';
