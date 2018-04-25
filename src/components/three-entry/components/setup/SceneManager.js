@@ -103,7 +103,8 @@ export default class SceneManager {
     updateTweets = (tweets) => {
         this.state = {...this.state, tweets};
         const oldSubjects = this.sceneSubjects.filter(x => {
-            if (x.isMarble) this.scene.remove(x.object);
+            debugger;
+            if (x.isMarble) this.scene.remove(x.marble);
             return !x.isMarble;
         });
         const newSubjects = [ ...oldSubjects ];

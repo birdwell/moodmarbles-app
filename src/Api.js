@@ -9,7 +9,12 @@ export const getTweets = async ({ hashtag, count = 15} ) => {
 };
 
 export const getCachedHashTags = async () => {
-	const response = await fetch('/twitter/cached');
-	const cachedHashTags = await response.json();
-	return cachedHashTags;
+	try {
+		const response = await fetch('/twitter/cached');
+		const cachedHashTags = await response.json();
+		return cachedHashTags;
+	} catch (error) {
+		return error.message || 'Unable to get tweets';
+	}
+
 }
