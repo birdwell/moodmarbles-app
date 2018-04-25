@@ -9,6 +9,7 @@
     "emotion": "^9.1.2",
     "mathjs": "^4.1.2",
     "prop-types": "^15.6.1",
+    "query-string": "^6.0.0",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
     "react-emotion": "^9.1.2",

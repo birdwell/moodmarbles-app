@@ -7,17 +7,16 @@ import './index.css';
 import Tweet from './tweet';
 
 export default class ThreeContainer extends Component {
-
     state = {
         tweets: [],
         filters: [],
         filteredTweets: []
     }
 
-    componentDidMount() {   
-        const state = this.props.location.state;
+    componentDidMount() {
+        const { state } = this.props.location;
         let config = {};
-        if(state && state.tweets && state.tweets.length > 0) {
+        if (state && state.tweets && state.tweets.length > 0) {
             const { tweets, hashtag, count } = state;
             config = { tweets, hashtag, count };
         } else {
@@ -60,12 +59,14 @@ export default class ThreeContainer extends Component {
         return (
             <React.Fragment>
                 <h3 className="hasttag-header">#{hashtag || ''}</h3>
-                {tweets.length > 0 && <Legend onFilter={this.onFilter} filters={filters} tweets={tweets} />}
+                {tweets.length > 0 && (
+                    <Legend onFilter={this.onFilter} filters={filters} tweets={tweets} />
+                )}
                 <div style={{ height: '100vh', width: '100%' }} ref={element => (this.threeRootElement = element)} />
                 <div className="timeline-column">
                     {
                         filteredTweets
-                            .filter(x => x.tweet ? !!x.tweet.id : false)
+                            .filter(x => (x.tweet ? !!x.tweet.id : false))
                             .map(tweet => <Tweet key={tweet.tweet.id} tweet={tweet} />)
                     }
                 </div>

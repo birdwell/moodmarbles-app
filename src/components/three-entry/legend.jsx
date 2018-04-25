@@ -1,4 +1,5 @@
 import React from 'react';
+import cx from 'classnames';
 
 import './legend.css';
 
@@ -7,7 +8,6 @@ import joy from './components/assets/joy.png';
 import anger from './components/assets/angry.png';
 import fear from './components/assets/fear.png';
 import disgust from './components/assets/disgust.jpg';
-import cx from 'classnames';
 
 const mood = {
 	sadness,
@@ -23,18 +23,18 @@ const Legend = ({ tweets, onFilter, filters }) => {
 	return (
 		<div className="legend">
 			{
-				Object.entries(emotions).map(emotion => { 
+				Object.entries(emotions).map((emotion) => {
 					const isActive = filters.includes(emotion[0]);
 					return (
 						<div
 							onClick={() => onFilter(emotion[0])}
-							key={emotion[0]} 
+							key={emotion[0]}
 							className={cx('emotion', { 'active': isActive })}
 						>
 							<div style={{ backgroundImage: `url(${mood[emotion[0]]})` }} className="emoji-label" />
 							<div className="emotion-count">{emotion[1]}</div>
 						</div>
-					)
+					);
 				})
 			}
 		</div>
