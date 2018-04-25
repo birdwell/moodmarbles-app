@@ -60,7 +60,7 @@ class Setup extends Component {
 									</div>
 									<div className="choose-cached" onClick={this.toggleCached}>
 										Choose from cached hashtags (<span role="img" aria-label="race car" >🏎️</span>)
-         							</div>
+									</div>
 								</React.Fragment>
 							)}
 							{isCached && (
@@ -68,8 +68,8 @@ class Setup extends Component {
 									<div className="form-control">
 										<label>Cached Hashtags</label>
 										<select value={cachedHashTag} name="cachedHashTag" onChange={this.onChange}>
-											{ cachedHashTags.map(cachedTag => 
-												(<option key={cachedTag} value={cachedTag}>{cachedTag}</option>)) 
+											{ cachedHashTags.map(cachedTag =>
+												(<option key={cachedTag} value={cachedTag}>{cachedTag}</option>))
 											}
 										</select>
 									</div>

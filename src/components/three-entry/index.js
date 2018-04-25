@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+
 import threeEntryPoint from './components/threeEntryPoint';
 import fallBackTweets from './data/coffee.json';
 
@@ -7,6 +9,13 @@ import './index.css';
 import Tweet from './tweet';
 
 export default class ThreeContainer extends Component {
+    static propTypes = {
+        location: PropTypes.shape({
+            state: PropTypes.shape({
+                tweets: PropTypes.array
+            })
+        }).isRequired
+    }
     state = {
         tweets: [],
         filters: [],

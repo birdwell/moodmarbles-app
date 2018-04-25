@@ -32,6 +32,8 @@ module.exports = {
         "jsx-a11y/click-events-have-key-events": "off",
         "react/jsx-indent-props": "off",
         "no-underscore-dangle": "off",
-        "no-underscore-dangle": "off"
+        "no-underscore-dangle": "off",
+        "jsx-a11y/label-has-for": "off",
+        "react/no-did-mount-set-state": "off",
     }
 };
