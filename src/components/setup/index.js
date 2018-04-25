@@ -6,29 +6,25 @@ import './index.css';
 import Loading from './loading';
 
 class Setup extends Component {
-	state = { 
+	state = {
 		count: 1,
 		hashtag: '',
 		cachedHashTags: [],
 		cachedHashTag: '',
 		isCached: false,
 		isLoading: false,
-		error: ''
+		error: '',
 	}
 
 	componentDidMount = () => {
 		getCachedHashTags()
-			.then(cachedHashTags => {
+			.then((cachedHashTags) => {
 				this.setState({ cachedHashTags });
 			});
 	}
-	
-	onChange = ({ target: { name, value }}) => {
-		this.setState({ [name]: value, error: '' });
-	}
 
-	toggleCached = () => {
-		this.setState({ isCached: !this.state.isCached });
+	onChange = ({ target: { name, value } }) => {
+		this.setState({ [name]: value, error: '' });
 	}
 
 	onSubmit = async (path) => {
@@ -44,8 +40,6 @@ class Setup extends Component {
 		} catch (error) {
 			this.setState({ isLoading: false, error: 'Unable to get tweets.' });
 		}
-
-
 	}
 
 	render() {
@@ -57,7 +51,7 @@ class Setup extends Component {
 					<div className="setup-experience col-lg-6 col-md-8 col-sm-12">
 						<h3 className="setup-header">HashTag Experience</h3>
 						{error !== '' && <p className="alert alert-danger">{ error }</p>}
-						<div>
+						<React.Fragment>
 							{!isCached && (
 								<React.Fragment>
 									<div className="form-control">
@@ -65,8 +59,8 @@ class Setup extends Component {
 										<input value={hashtag} name="hashtag" onChange={this.onChange} type="text" />
 									</div>
 									<div className="choose-cached" onClick={this.toggleCached}>
-										Choose from cached hashtags (<span role="img"  aria-label="race car" >🏎️</span>)
-								</div>
+										Choose from cached hashtags (<span role="img" aria-label="race car" >🏎️</span>)
+         							</div>
 								</React.Fragment>
 							)}
 							{isCached && (
@@ -74,27 +68,27 @@ class Setup extends Component {
 									<div className="form-control">
 										<label>Cached Hashtags</label>
 										<select value={cachedHashTag} name="cachedHashTag" onChange={this.onChange}>
-											{
-												cachedHashTags.map(cachedTag =>
-													(<option key={cachedTag} value={cachedTag}>{cachedTag}</option>)
-												)
+											{ cachedHashTags.map(cachedTag => 
+												(<option key={cachedTag} value={cachedTag}>{cachedTag}</option>)) 
 											}
 										</select>
 									</div>
 									<div className="choose-cached" onClick={this.toggleCached}>
-										Choose a hashtag (<span role="img"  aria-label="snail">🐌</span>)
-								</div>
+										Choose a hashtag (<span role="img" aria-label="snail">🐌</span>)
+									</div>
 								</React.Fragment>
 							)}
-
 							<div className="form-control">
 								<label htmlFor="count">Count</label>
 								<input value={count} name="count" type="number" min="1" max="100" onChange={this.onChange} />
 							</div>
-							<button className="button-primary-outlined" onClick={() => this.onSubmit('/three')}><span role="img" aria-label="thumbs-up">👍</span> Go to Experience</button>
-							<button className="button-primary-outlined" onClick={() => this.onSubmit('/insights')}><span role="img" aria-label="chart">📊</span> Go to Insights</button>
-						</div>
-
+							<button className="button-primary-outlined" onClick={() => this.onSubmit('/three')}>
+								<span role="img" aria-label="thumbs-up">👍</span> Go to Experience
+							</button>
+							<button className="button-primary-outlined" onClick={() => this.onSubmit('/insights')}>
+								<span role="img" aria-label="chart">📊</span> Go to Insights
+							</button>
+						</React.Fragment>
 					</div>
 				</div>
 				<Loading isLoading={this.state.isLoading} />

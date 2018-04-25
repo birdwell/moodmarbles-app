@@ -8,7 +8,6 @@ import {
 import { Vector } from '../physics';
 
 class BoxContainer {
-
     constructor(scene, width, height, depth) {
         const boxGeo = new BoxGeometry(width, height, depth);
         this.object = new Mesh(boxGeo, new MeshBasicMaterial(0x000000));

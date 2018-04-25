@@ -41,7 +41,7 @@ export default (container, config) => {
 
     function render(time) {
         requestAnimationFrame(render);
-        sceneManager.update();
+        sceneManager.update(time);
     }
 
     function cleanup() {
