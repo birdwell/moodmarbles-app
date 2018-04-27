@@ -15,7 +15,7 @@
     "react-emotion": "^9.1.2",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
-    "react-scripts": "1.1.4",
+    "react-scripts": "^1.1.4",
     "react-spinners": "^0.3.2",
     "react-tweet-embed": "^1.1.0",
     "react-twitter-widgets": "^1.7.1",
