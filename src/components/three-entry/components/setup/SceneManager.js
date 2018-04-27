@@ -18,13 +18,8 @@ export default class SceneManager {
         this.mouse = new Vector2();
         this.state = config;
         this.canvas = canvas;
-<<<<<<< HEAD
+        // Define gravity
         this.gravity = new Force("gravity", new Vector(0, -0.1, 0), true);
-=======
-        // Define gravity as 1/10th 
-        this.gravity = new Vector(0, -0.1, 0);
-        // Keep a list of items that can be run into
->>>>>>> 7dacf02a5416715662478d23624ac04d0fccaa09
         this.collidables = [];
         // Define screen dimensions
         this.screenDimensions = {
@@ -123,7 +118,6 @@ export default class SceneManager {
 
     // -------------------------------
 
-<<<<<<< HEAD
     getCenter(objs) {
         var agg = new Vector(0, 0, 0);
         var aggMass = 0;
@@ -154,8 +148,8 @@ export default class SceneManager {
             my_marb.forEach( m => {
                 var f_vec = Vector.subtract(centers[k].normalize(), m.getPosition().normalize());
                 f_vec.scale(-0.01);
-                var f = new Force("center", f_vec, false);
-                m.addForce(f);
+                //var f = new Force("center", f_vec, false);
+                //m.addForce(f);
             });
         });
     }
@@ -177,25 +171,13 @@ export default class SceneManager {
             var centers = this.centerOfMass(marbles) 
             this.applyForces(centers, marbles);
         }
-=======
-    // Update each scene subject
-    update = () => {
-        const elapsedTime = this.clock.getElapsedTime();
-        this.sceneSubjects.forEach(subject => subject.update(elapsedTime, this.collidables));
->>>>>>> 7dacf02a5416715662478d23624ac04d0fccaa09
         this.renderer.render(this.scene, this.camera);
     }
 
     // Update each tweet object
     updateTweets = (tweets) => {
-<<<<<<< HEAD
         this.state = {...this.state, tweets};
         const oldSubjects = this.sceneSubjects.filter(x => {
-=======
-        this.state = { ...this.state, tweets };
-        // Clib non visible tweets
-        const oldSubjects = this.sceneSubjects.filter((x) => {
->>>>>>> 7dacf02a5416715662478d23624ac04d0fccaa09
             if (x.isMarble) this.scene.remove(x.marble);
             return !x.isMarble;
         });
