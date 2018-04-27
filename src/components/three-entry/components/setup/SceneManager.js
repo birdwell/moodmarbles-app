@@ -1,50 +1,67 @@
-import * as THREE from 'three';
+import { Clock, Vector3, Vector2, Scene, Color, WebGLRenderer, PerspectiveCamera } from 'three';
+import OrbitControls from 'three-orbitcontrols';
 
 import { SceneSubject, BoxContainer, Marble } from '../scene-subjects';
 import { Vector, CollisionPlane, Force } from '../physics';
 
 import GeneralLights from './GeneralLights';
-import OrbitControls from 'three-orbitcontrols';
 
+/** 
+ * Manage the components of the scene
+ * and the render/update
+*/
 export default class SceneManager {
-
     constructor(canvas, config) {
-        this.clock = new THREE.Clock();
-        this.origin = new THREE.Vector3(0, 0, 0);
-        this.mouse = new THREE.Vector2();
+        // Track ellapsed time
+        this.clock = new Clock();
+        this.origin = new Vector3(0, 0, 0);
+        this.mouse = new Vector2();
         this.state = config;
         this.canvas = canvas;
+<<<<<<< HEAD
         this.gravity = new Force("gravity", new Vector(0, -0.1, 0), true);
+=======
+        // Define gravity as 1/10th 
+        this.gravity = new Vector(0, -0.1, 0);
+        // Keep a list of items that can be run into
+>>>>>>> 7dacf02a5416715662478d23624ac04d0fccaa09
         this.collidables = [];
+        // Define screen dimensions
         this.screenDimensions = {
             width: canvas.width,
             height: canvas.height
         };
 
+        // Construct the components of the scene
+        // including the controls for rotation of the container
         this.scene = this.buildScene();
         this.renderer = this.buildRender(this.screenDimensions);
         this.camera = this.buildCamera(this.screenDimensions);
         this.sceneSubjects = this.createSceneSubjects(this.scene);
         this.controls = new OrbitControls(this.camera, canvas);
 
+        // Add teh camera and set position
         this.scene.add(this.camera);
         this.controls.minDistance = 10;
         this.controls.maxDistance = 200;
     }
 
     /**
-     * Building Methods
+     * Build the scene
      */
-
     buildScene() {
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color('#FFF');
+        // Construct scene and set backgroun to white
+        const scene = new Scene();
+        scene.background = new Color('#FFF');
 
         return scene;
     }
 
+    /**
+     * Construct the Three.js renderer
+     */
     buildRender({ width, height }) {
-        const renderer = new THREE.WebGLRenderer({
+        const renderer = new WebGLRenderer({
             canvas: this.canvas,
             antialias: true,
             alpha: true
@@ -59,11 +76,14 @@ export default class SceneManager {
         return renderer;
     }
 
+    /**
+     * Construct the camera as perspective camera
+     */
     buildCamera({ width, height }) {
         const aspectRatio = width / height;
         const fieldOfView = 60;
 
-        const camera = new THREE.PerspectiveCamera(
+        const camera = new PerspectiveCamera(
             fieldOfView,
             aspectRatio,
         );
@@ -72,19 +92,28 @@ export default class SceneManager {
         return camera;
     }
 
+    /**
+     * Construct the items in the scene
+     */
     createSceneSubjects = (scene) => {
         const sceneSubjects = [
+            // lighting
             new GeneralLights(scene),
             new SceneSubject(scene),
+            // Container
             new BoxContainer(scene, 100, 100, 100)
         ];
+
+        // Floor of container
         const cp = new CollisionPlane(scene, 100, 1, 100);
 
         // collisions against the container
         this.collidables.push(cp);
 
-        this.state.tweets.forEach(tweet => {
-            let marble = new Marble(scene, tweet);
+        // Construct marble for each tweet and 
+        // add gravity to it
+        this.state.tweets.forEach((tweet) => {
+            const marble = new Marble(scene, tweet);
             marble.addForce(this.gravity);
             sceneSubjects.push(marble);
         });
@@ -94,6 +123,7 @@ export default class SceneManager {
 
     // -------------------------------
 
+<<<<<<< HEAD
     getCenter(objs) {
         var agg = new Vector(0, 0, 0);
         var aggMass = 0;
@@ -147,19 +177,33 @@ export default class SceneManager {
             var centers = this.centerOfMass(marbles) 
             this.applyForces(centers, marbles);
         }
+=======
+    // Update each scene subject
+    update = () => {
+        const elapsedTime = this.clock.getElapsedTime();
+        this.sceneSubjects.forEach(subject => subject.update(elapsedTime, this.collidables));
+>>>>>>> 7dacf02a5416715662478d23624ac04d0fccaa09
         this.renderer.render(this.scene, this.camera);
     }
 
+    // Update each tweet object
     updateTweets = (tweets) => {
+<<<<<<< HEAD
         this.state = {...this.state, tweets};
         const oldSubjects = this.sceneSubjects.filter(x => {
+=======
+        this.state = { ...this.state, tweets };
+        // Clib non visible tweets
+        const oldSubjects = this.sceneSubjects.filter((x) => {
+>>>>>>> 7dacf02a5416715662478d23624ac04d0fccaa09
             if (x.isMarble) this.scene.remove(x.marble);
             return !x.isMarble;
         });
-        const newSubjects = [ ...oldSubjects ];
+        const newSubjects = [...oldSubjects];
 
-        tweets.forEach(tweet => {
-            let marble = new Marble(this.scene, tweet);
+        // construct necessary new marbles
+        tweets.forEach((tweet) => {
+            const marble = new Marble(this.scene, tweet);
             marble.addForce(this.gravity);
             newSubjects.push(marble);
         });
@@ -167,6 +211,9 @@ export default class SceneManager {
         this.sceneSubjects = newSubjects;
     }
 
+    /**
+     * Update scene on window resize
+     */
     onWindowResize = () => {
         const { width, height } = this.canvas;
 
@@ -180,10 +227,10 @@ export default class SceneManager {
     }
 
     onMouseMove = (x, y) => {
-        this.mouse.set(x,y);
+        this.mouse.set(x, y);
     }
 
     cleanup = () => {
         this.controls.dispose();
     }
-};
+}

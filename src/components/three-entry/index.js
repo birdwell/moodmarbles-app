@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+
 import threeEntryPoint from './components/threeEntryPoint';
 import fallBackTweets from './data/coffee.json';
 
@@ -7,17 +9,23 @@ import './index.css';
 import Tweet from './tweet';
 
 export default class ThreeContainer extends Component {
-
+    static propTypes = {
+        location: PropTypes.shape({
+            state: PropTypes.shape({
+                tweets: PropTypes.array
+            })
+        }).isRequired
+    }
     state = {
         tweets: [],
         filters: [],
         filteredTweets: []
     }
 
-    componentDidMount() {   
-        const state = this.props.location.state;
+    componentDidMount() {
+        const { state } = this.props.location;
         let config = {};
-        if(state && state.tweets && state.tweets.length > 0) {
+        if (state && state.tweets && state.tweets.length > 0) {
             const { tweets, hashtag, count } = state;
             config = { tweets, hashtag, count };
         } else {
@@ -60,12 +68,14 @@ export default class ThreeContainer extends Component {
         return (
             <React.Fragment>
                 <h3 className="hasttag-header">#{hashtag || ''}</h3>
-                {tweets.length > 0 && <Legend onFilter={this.onFilter} filters={filters} tweets={tweets} />}
-                <div style={{ height: '100vh', width: '100%' }} ref={element => (this.threeRootElement = element)} />
+                {tweets.length > 0 && (
+                    <Legend onFilter={this.onFilter} filters={filters} tweets={tweets} />
+                )}
+                <div style={{ height: '100vh', width: '100%' }} ref={(element) => { this.threeRootElement = element; }} />
                 <div className="timeline-column">
                     {
                         filteredTweets
-                            .filter(x => x.tweet ? !!x.tweet.id : false)
+                            .filter(x => (x.tweet ? !!x.tweet.id : false))
                             .map(tweet => <Tweet key={tweet.tweet.id} tweet={tweet} />)
                     }
                 </div>

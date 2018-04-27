@@ -5,9 +5,8 @@ import {
     SphereGeometry,
     ShaderMaterial
 } from 'three';
-import { getRandomInt } from '../../../utils';
+import { getRandomInt, variance } from '../../../utils';
 import { Vector } from '../physics';
-import { variance } from '../../../utils';
 
 import sadness from '../assets/sad.png';
 import joy from '../assets/joy.png';
@@ -23,46 +22,63 @@ const mood = {
     disgust
 };
 
+/**
+ * Export object representing a marble
+ */
 export default (scene, tweet) => {
+    // Load the appropriate mood texture
     const texture = new TextureLoader().load(mood[tweet.emotion]);
+    // Set the radius relative to the magnitiude of emotion
     const radius = tweet.magnitude * 10;
+
+    // Create the geometry and mesh
     const geometry = new SphereGeometry(radius, 10, 10);
     const uniforms = { texture: { type: 't', value: texture } };
+
     // material
     const material = new ShaderMaterial({
-        uniforms: uniforms,
+        uniforms,
         vertexShader: document.getElementById('vertex_shader').textContent,
         fragmentShader: document.getElementById('fragment_shader').textContent
     });
 
     const marble = new Mesh(geometry, material);
+
+    // Set random position
     const position = new Vector(
         getRandomInt(-50, 50),
         200,
         getRandomInt(-50, 50)
     );
+
+    // Start velocity at 0
     const velocity = new Vector(0, 0, 0);
+
+    // Various items associated with marble physics
     const past_positions = [];
     const mass = tweet.magnitude;
 	var forces = [];
 	var settled = false;
     const isMarble = true;
 
+    // Set position
     marble.position.x = position.x;
     marble.position.y = position.y;
     marble.position.z = position.z;
 
     scene.add(marble);
 
+    // Apply a force to this marble
     function addForce(force) {
         forces.push(force);
-    };
+    }
 
+    // Adjust the position of the marble
     function adjustPosition() {
         marble.position.x += velocity.x;
         marble.position.y += velocity.y;
         marble.position.z += velocity.z;
-    };
+    }
 
 	function assocTweet() {
 		return tweet;
@@ -85,19 +101,28 @@ export default (scene, tweet) => {
         velocity.x = result.x;
         velocity.y = result.y;
         velocity.z = result.z;
+        // To simulate losing energy, lessen
+        // the magnitude of the velocity
         velocity.scale(0.8);
-    };
+    }
 
-    function getCollisions (objects) {
+    // Use ray tracing to find any potential 
+    // collisions
+    function getCollisions(objects) {
+        // Get the base objects
         const _objs = [];
-        objects.forEach(x => {
+        objects.forEach((x) => {
             _objs.push(x.object);
         });
+        // For every vertex in this geometry
         for (
             let vertexIndex = 0;
             vertexIndex < marble.geometry.vertices.length;
-            vertexIndex++
+            vertexIndex += 1
         ) {
+            // Use the Three.js ray caster to find potential collisions.
+            // There is a problem here. When the object is moving too fast
+            // it doesn't always work, but we couldn't find a better solution
             const o_p = marble.position.clone();
             const _v = marble.geometry.vertices[vertexIndex].clone();
             const g_v = _v.applyMatrix4(marble.matrix);
@@ -105,26 +130,29 @@ export default (scene, tweet) => {
 
             const ray = new Raycaster(o_p, d_v.clone().normalize());
             const results = ray.intersectObjects(_objs);
+            // If collision found, reflect off the object
             if (results.length > 0 && results[0].distance < d_v.length()) {
                 reflect(objects[0]);
                 break;
             }
         }
-    };
+    }
 
-    function getPosition () {
+    // Get the position
+    function getPosition() {
         return new Vector(
             marble.position.x,
             marble.position.y,
             marble.position.z
         );
-    };
+    }
 
-    function setPosition (newPos) {
+    // Set the position
+    function setPosition(newPos) {
         marble.position.x = newPos.x;
         marble.position.y = newPos.y;
         marble.position.x = newPos.z;
-    };
+    }
 
     function update (elapsedTime, collidables) {
 		const aggregate = new Vector(0, 0, 0);
@@ -138,7 +166,9 @@ export default (scene, tweet) => {
 			}
 		}
         aggregate.scale(mass);
+        // Change the velocity with teh force
         velocity.add(aggregate);
+        // Track pas positions
         past_positions.push(Math.abs(getPosition().getMagnitude()));
         if (past_positions.length > 60) {
             past_positions.shift();
@@ -150,6 +180,7 @@ export default (scene, tweet) => {
 		   debugger;
 		   settled = true;
         }
+        // Find any collisions and later the position
         getCollisions(collidables);
         adjustPosition();
 	};

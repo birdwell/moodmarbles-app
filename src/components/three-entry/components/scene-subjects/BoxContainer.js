@@ -7,17 +7,22 @@ import {
 
 import { Vector } from '../physics';
 
+/** 
+ * Represents the container for the marbles
+*/
 class BoxContainer {
-
     constructor(scene, width, height, depth) {
+        // Construct the geometry
         const boxGeo = new BoxGeometry(width, height, depth);
         this.object = new Mesh(boxGeo, new MeshBasicMaterial(0x000000));
         const box = new BoxHelper(this.object, 0x000000);
         scene.add(box);
 
+        // Set the normal
         this._n = this.calcNormal();
     }
 
+    // unused
     update() {
 
     }
@@ -31,9 +36,12 @@ class BoxContainer {
         // var cma = Vector.subtract(corn3Vec, corn1Vec);
         // var _cross = math.cross(bma.asArray(), cma.asArray());
         // return _cross;
+
+        // THe normal for the conatiner is constant
         return new Vector(0, 1, 0);
     }
 
+    // Get the normal
     normal() {
         return this._n;
     }

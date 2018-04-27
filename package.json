@@ -8,12 +8,14 @@
     "classnames": "^2.2.5",
     "emotion": "^9.1.2",
     "mathjs": "^4.1.2",
+    "prop-types": "^15.6.1",
+    "query-string": "^6.0.0",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
     "react-emotion": "^9.1.2",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
-    "react-scripts": "1.1.4",
+    "react-scripts": "^1.1.4",
     "react-spinners": "^0.3.2",
     "react-tweet-embed": "^1.1.0",
     "react-twitter-widgets": "^1.7.1",
@@ -28,5 +30,14 @@
     "eject": "react-scripts eject",
     "heroku": "git push heroku master",
     "update": "git push && git push heroku master"
+  },
+  "devDependencies": {
+    "babel-eslint": "8",
+    "eslint": "4.x",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-config-google": "^0.9.1",
+    "eslint-plugin-import": "^2.11.0",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
+    "eslint-plugin-react": "^7.7.0"
   }
 }

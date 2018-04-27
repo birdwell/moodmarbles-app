@@ -2,16 +2,14 @@
 import math from 'mathjs';
 
 class Vector {
-
     constructor(x, y, z) {
         this.x = x;
         this.y = y;
         this.z = z;
-        this.magnitude
     }
 
     getMagnitude() {
-        return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
+        return Math.sqrt((this.x * this.x) + (this.y * this.y) + (this.z * this.z));
     }
 
     scale(delta) {
@@ -26,12 +24,12 @@ class Vector {
         this.z += vector.z;
     }
 
-    asArray () {
+    asArray() {
         return [this.x, this.y, this.z];
     }
 
     normalize() {
-        var results = new Vector(this.x, this.y, this.z);
+        const results = new Vector(this.x, this.y, this.z);
         results.x /= this.getMagnitude();
         results.y /= this.getMagnitude();
         results.z /= this.getMagnitude();
