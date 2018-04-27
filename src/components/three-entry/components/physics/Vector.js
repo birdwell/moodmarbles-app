@@ -38,6 +38,10 @@ class Vector {
         return results;
     }
 
+    isZero() {
+        return this.x == 0 && this.y == 0 && this.z == 0;
+    }
+
     becomeZero() {
         this.x = 0;
         this.y = 0;

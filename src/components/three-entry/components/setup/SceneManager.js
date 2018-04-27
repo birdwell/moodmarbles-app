@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 
 import { SceneSubject, BoxContainer, Marble } from '../scene-subjects';
-import { Vector, CollisionPlane } from '../physics';
+import { Vector, CollisionPlane, Force } from '../physics';
 
 import GeneralLights from './GeneralLights';
 import OrbitControls from 'three-orbitcontrols';
@@ -14,7 +14,7 @@ export default class SceneManager {
         this.mouse = new THREE.Vector2();
         this.state = config;
         this.canvas = canvas;
-        this.gravity = new Vector(0, -0.1, 0);
+        this.gravity = new Force("gravity", new Vector(0, -0.1, 0), true);
         this.collidables = [];
         this.screenDimensions = {
             width: canvas.width,
@@ -94,16 +94,65 @@ export default class SceneManager {
 
     // -------------------------------
 
+    getCenter(objs) {
+        var agg = new Vector(0, 0, 0);
+        var aggMass = 0;
+        objs.forEach( x=> {
+            var pos = x.getPosition();
+            //pos.scale(x.getMass());
+            aggMass += x.getMass();
+            agg.add(pos);
+        });
+        //agg.scale(1.0 / aggMass);
+        agg.scale(1.0 / objs.length);
+        return agg;
+    }
+
+    centerOfMass(marbles) {
+        var centers = {}
+        const keys = Object.keys(marbles);
+        for(var i = 0; i < keys.length; i++) {
+            centers[keys[i]] = this.getCenter(marbles[keys[i]]);
+        }
+        return centers;
+    }
+
+    applyForces (centers, marbles) {
+        var keys = Object.keys(centers);
+        keys.forEach( k => {
+            var my_marb = marbles[k];
+            my_marb.forEach( m => {
+                var f_vec = Vector.subtract(centers[k].normalize(), m.getPosition().normalize());
+                f_vec.scale(-0.01);
+                var f = new Force("center", f_vec, false);
+                m.addForce(f);
+            });
+        });
+    }
+
     update = () => {
         const elapsedTime = this.clock.getElapsedTime();
-        this.sceneSubjects.forEach(subject => subject.update(elapsedTime, this.collidables))
+        var marbles = {};
+        var m_list = [];
+        this.sceneSubjects.forEach(subject => {
+            subject.update(elapsedTime, this.collidables);
+            if(subject.isMarble) {
+                if(!(subject.assocTweet().emotion in marbles)) marbles[subject.assocTweet().emotion] = []
+                marbles[subject.assocTweet().emotion].push(subject);
+                m_list.push(subject);
+            }
+        });
+        if(m_list.every(m => (m.getSettled())))
+        {
+            var centers = this.centerOfMass(marbles) 
+            this.applyForces(centers, marbles);
+        }
         this.renderer.render(this.scene, this.camera);
     }
 
     updateTweets = (tweets) => {
         this.state = {...this.state, tweets};
         const oldSubjects = this.sceneSubjects.filter(x => {
-            debugger;
             if (x.isMarble) this.scene.remove(x.marble);
             return !x.isMarble;
         });

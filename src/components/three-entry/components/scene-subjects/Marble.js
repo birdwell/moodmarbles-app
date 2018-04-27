@@ -44,7 +44,8 @@ export default (scene, tweet) => {
     const velocity = new Vector(0, 0, 0);
     const past_positions = [];
     const mass = tweet.magnitude;
-    const forces = [];
+	var forces = [];
+	var settled = false;
     const isMarble = true;
 
     marble.position.x = position.x;
@@ -62,6 +63,18 @@ export default (scene, tweet) => {
         marble.position.y += velocity.y;
         marble.position.z += velocity.z;
     };
+
+	function assocTweet() {
+		return tweet;
+	};
+
+	function getMass() {
+		return mass;
+	};
+
+	function getVelocity() {
+		return velocity;
+	};
 
     function reflect (obj) {
         const normal = obj.normal();
@@ -114,12 +127,16 @@ export default (scene, tweet) => {
     };
 
     function update (elapsedTime, collidables) {
-        const aggregate = new Vector(0, 0, 0);
-        forces.forEach(x => {
-            aggregate.x += x.x;
-            aggregate.y += x.y;
-            aggregate.z += x.z;
-        });
+		const aggregate = new Vector(0, 0, 0);
+		for(var i = 0; i < forces.length; i++) {
+			aggregate.x += forces[i].vec.x;
+			aggregate.y += forces[i].vec.y;
+			aggregate.z += forces[i].vec.z;
+			if(!forces[i].perm) {
+				forces.splice(i, 1);
+				i--;
+			}
+		}
         aggregate.scale(mass);
         velocity.add(aggregate);
         past_positions.push(Math.abs(getPosition().getMagnitude()));
@@ -127,12 +144,19 @@ export default (scene, tweet) => {
             past_positions.shift();
         }
         var change = variance(past_positions);
-        if (change < 0.15 && past_positions.length == 60) {
-            velocity.becomeZero();
+        if (change < 0.15 && past_positions.length == 60 && !settled) {
+		   velocity.becomeZero();
+		   forces = forces.filter(f => (f.name != "gravity"));
+		   debugger;
+		   settled = true;
         }
         getCollisions(collidables);
         adjustPosition();
-    };
+	};
+	
+	function getSettled() {
+		return settled;
+	};
 
     return {
         update,
@@ -143,6 +167,10 @@ export default (scene, tweet) => {
         adjustPosition,
         getCollisions,
         getPosition,
-        setPosition
+		setPosition,
+		assocTweet,
+		getMass,
+		getVelocity,
+		getSettled
     };
 };
