@@ -14,6 +14,7 @@ import anger from '../assets/angry.png';
 import fear from '../assets/fear.png';
 import disgust from '../assets/disgust.jpg';
 
+// mood constants
 const mood = {
     sadness,
     joy,
@@ -80,18 +81,23 @@ export default (scene, tweet) => {
         marble.position.z += velocity.z;
     }
 
+    // Get the tweet object for this marble
 	function assocTweet() {
 		return tweet;
 	};
 
+    // Get the mass of the marble
 	function getMass() {
 		return mass;
 	};
 
+    // Get the velocity of the marble
 	function getVelocity() {
 		return velocity;
 	};
 
+    // Reflect the marble off of 
+    // a given object
     function reflect (obj) {
         const normal = obj.normal();
         const _dot = Vector.dot(velocity, normal);
@@ -155,11 +161,14 @@ export default (scene, tweet) => {
     }
 
     function update (elapsedTime, collidables) {
+        // Aggregate all forces 
 		const aggregate = new Vector(0, 0, 0);
 		for(var i = 0; i < forces.length; i++) {
 			aggregate.x += forces[i].vec.x;
 			aggregate.y += forces[i].vec.y;
-			aggregate.z += forces[i].vec.z;
+            aggregate.z += forces[i].vec.z;
+            // If the force is not permanent,
+            // remove it.
 			if(!forces[i].perm) {
 				forces.splice(i, 1);
 				i--;
