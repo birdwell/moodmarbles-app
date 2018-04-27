@@ -5,7 +5,8 @@ module.exports = {
         "document": true,
         "fetch": true,
         "window": true,
-        "requestAnimationFrame": true
+        "requestAnimationFrame": true,
+        "it": true
     },
     "rules": {
         "strict": 0,

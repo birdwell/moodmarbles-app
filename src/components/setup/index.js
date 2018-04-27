@@ -42,6 +42,10 @@ class Setup extends Component {
 		}
 	}
 
+	toggleCached = () => {
+		this.setState({ isCached: !this.state.isCached });
+	}
+
 	render() {
 		const { count, hashtag, isCached, cachedHashTag, cachedHashTags, error } = this.state;
 

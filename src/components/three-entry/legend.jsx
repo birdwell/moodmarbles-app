@@ -43,9 +43,9 @@ const Legend = ({ tweets, onFilter, filters }) => {
 };
 
 Legend.propTypes = {
-	tweets: PropTypes.shape({
+	tweets: PropTypes.arrayOf(PropTypes.shape({
 		emotion: PropTypes.string.isRequired
-	}).isRequired,
+	})).isRequired,
 	onFilter: PropTypes.func.isRequired,
 	filters: PropTypes.array.isRequired
 };

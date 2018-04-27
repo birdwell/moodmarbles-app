@@ -6,6 +6,13 @@ import Setup from './components/setup';
 import Nav from './components/nav';
 import Insights from './components/insights';
 
+/**
+ * App
+ * Three routes for the app:
+ * / goes to the setup
+ * /three goes to the 3D experience
+ * /insights goes to the graph insights
+ */
 const App = () => (
     <Router>
         <React.Fragment>

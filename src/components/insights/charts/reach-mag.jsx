@@ -23,16 +23,16 @@ const SimpleScatterChart = ({ tweets }) => {
 	return (
 		<ScatterChart width={400} height={400} margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
 			<CartesianGrid />
-			<XAxis dataKey="x" type="number" name="Emotion Magnitude">
-				<Label position="bottom">
-					Emotional Magnitude
-				</Label>
-			</XAxis>
 			<YAxis dataKey="y" type="number" name="Interaction">
 				<Label angle={270} position="left" style={{ textAnchor: 'middle' }}>
 					Interaction
 				</Label>
 			</YAxis>
+			<XAxis dataKey="x" tickCount={10} allowDecimals type="number" name="Emotion Magnitude">
+				<Label position="bottom">
+					Emotional Magnitude
+				</Label>
+			</XAxis>
 			<Scatter name="Joy" data={joyData} shape={<ScatterLabel emoji="😁" />} />
 			<Scatter name="Anger" data={angerData} shape={<ScatterLabel emoji="😠" />} />
 			<Scatter name="Sadness" data={sadnessData} shape={<ScatterLabel emoji="😭" />} />
