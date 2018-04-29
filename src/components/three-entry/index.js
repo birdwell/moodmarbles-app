@@ -52,13 +52,13 @@ export default class ThreeContainer extends Component {
             const newTweets = tweets.filter(x => newFilters.includes(x.emotion));
 
             this.setState({ filters: newFilters, filteredTweets: newTweets });
-            this.threeEntryPoint.updateTweets(newFilters.length === 0 ? tweets : newTweets);
+            //this.threeEntryPoint.updateTweets(newFilters.length === 0 ? tweets : newTweets);
         } else {
             const newFilters = [...filters, emotion];
             const newTweets = tweets.filter(x => newFilters.includes(x.emotion));
 
             this.setState({ filters: newFilters, filteredTweets: newTweets });
-            this.threeEntryPoint.updateTweets(newTweets);
+            //this.threeEntryPoint.updateTweets(newTweets);
         }
     }
 

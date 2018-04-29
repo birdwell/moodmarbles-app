@@ -47,7 +47,7 @@ export default (scene, tweet) => {
 
     // Set random position
     const position = new Vector(
-        getRandomInt(-50, 50),
+        getRandomInt(-40, 40),
         200,
         getRandomInt(-50, 50)
     );
@@ -112,6 +112,15 @@ export default (scene, tweet) => {
         velocity.scale(0.8);
     }
 
+    function find_obj(objects,target) {
+        for(var i = 0; i < objects.length; i++) {
+            if(objects[i] == target){
+                return i;
+            }
+        }
+        return -1;
+    }
+
     // Use ray tracing to find any potential 
     // collisions
     function getCollisions(objects) {
@@ -133,12 +142,16 @@ export default (scene, tweet) => {
             const _v = marble.geometry.vertices[vertexIndex].clone();
             const g_v = _v.applyMatrix4(marble.matrix);
             const d_v = g_v.sub(marble.position);
+            //debugger;
 
-            const ray = new Raycaster(o_p, d_v.clone().normalize());
+            const ray = new Raycaster(o_p, getVelocity().normalize());
             const results = ray.intersectObjects(_objs);
             // If collision found, reflect off the object
             if (results.length > 0 && results[0].distance < d_v.length()) {
-                reflect(objects[0]);
+                var index = find_obj(_objs, results[0].object);
+                if(index != -1) {
+                    reflect(objects[index]);
+                }
                 break;
             }
         }
@@ -169,24 +182,24 @@ export default (scene, tweet) => {
             aggregate.z += forces[i].vec.z;
             // If the force is not permanent,
             // remove it.
-			if(!forces[i].perm) {
-				forces.splice(i, 1);
-				i--;
-			}
+			// if(!forces[i].perm) {
+			// 	forces.splice(i, 1);
+			// 	i--;
+            // }
+            forces = forces.filter(f => (f.name != "center"));
 		}
         aggregate.scale(mass);
         // Change the velocity with teh force
         velocity.add(aggregate);
         // Track pas positions
         past_positions.push(Math.abs(getPosition().getMagnitude()));
-        if (past_positions.length > 60) {
+        if (past_positions.length > 120) {
             past_positions.shift();
         }
         var change = variance(past_positions);
-        if (change < 0.15 && past_positions.length == 60 && !settled) {
+        if (change < 0.15 && past_positions.length == 120 && !settled) {
 		   velocity.becomeZero();
-		   forces = forces.filter(f => (f.name != "gravity"));
-		   debugger;
+           forces = forces.filter(f => (f.name != "gravity"));
 		   settled = true;
         }
         // Find any collisions and later the position

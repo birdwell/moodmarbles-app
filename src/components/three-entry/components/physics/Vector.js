@@ -61,7 +61,7 @@ class Vector {
         const results = new Vector(0, 0, 0);
         results.x = from.x - to.x;
         results.y = from.y - to.y;
-        results.x = from.z - to.z;
+        results.z = from.z - to.z;
         return results;
     }
 

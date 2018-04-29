@@ -45,6 +45,18 @@ class CollisionPlane {
     normal() {
         return this._n;
     }
+
+    setNormal(v) {
+        this._n = v;
+    }
+
+    setY(y) {
+        this.object.position.y = y;
+    }
+
+    setX(x) {
+        this.object.position.x = x;
+    }
 }
 
 export default CollisionPlane;

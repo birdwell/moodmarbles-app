@@ -19,7 +19,7 @@ export default class SceneManager {
         this.state = config;
         this.canvas = canvas;
         // Define gravity
-        this.gravity = new Force("gravity", new Vector(0, -0.1, 0), true);
+        this.gravity = new Force("gravity", new Vector(0, -0.07, 0), true);
         this.collidables = [];
         // Define screen dimensions
         this.screenDimensions = {
@@ -39,6 +39,8 @@ export default class SceneManager {
         this.scene.add(this.camera);
         this.controls.minDistance = 10;
         this.controls.maxDistance = 200;
+
+        this.didCalc = false;
     }
 
     /**
@@ -101,9 +103,19 @@ export default class SceneManager {
 
         // Floor of container
         const cp = new CollisionPlane(scene, 100, 1, 100);
+        // const wallcpleft = new CollisionPlane(scene, 1, 100, 100);
+        // wallcpleft.setNormal(new Vector(1, 0, 0));
+        // wallcpleft.setY(0);
+        // wallcpleft.setX(-50);
+        // const wallcpRight = new CollisionPlane(scene, 1, 100, 100);
+        // wallcpRight.setNormal(new Vector(-1, 0, 0));
+        // wallcpRight.setY(0);
+        // wallcpRight.setX(50);
 
         // collisions against the container
         this.collidables.push(cp);
+        // this.collidables.push(wallcpleft);
+        // this.collidables.push(wallcpRight);
 
         // Construct marble for each tweet and 
         // add gravity to it
@@ -123,12 +135,12 @@ export default class SceneManager {
         var aggMass = 0;
         objs.forEach( x=> {
             var pos = x.getPosition();
-            //pos.scale(x.getMass());
+            pos.scale(x.getMass());
             aggMass += x.getMass();
             agg.add(pos);
         });
-        //agg.scale(1.0 / aggMass);
-        agg.scale(1.0 / objs.length);
+        agg.scale(1.0 / aggMass);
+        //agg.scale(1.0 / objs.length);
         return agg;
     }
 
@@ -146,10 +158,13 @@ export default class SceneManager {
         keys.forEach( k => {
             var my_marb = marbles[k];
             my_marb.forEach( m => {
-                var f_vec = Vector.subtract(centers[k].normalize(), m.getPosition().normalize());
+                var f_vec = Vector.subtract(centers[k], m.getPosition());
+                if(!f_vec.isZero()) {
+                    f_vec = f_vec.normalize();
+                }
                 f_vec.scale(-0.01);
-                //var f = new Force("center", f_vec, false);
-                //m.addForce(f);
+                var f = new Force("center", f_vec, false);
+                m.addForce(f);
             });
         });
     }
@@ -166,31 +181,13 @@ export default class SceneManager {
                 m_list.push(subject);
             }
         });
-        if(m_list.every(m => (m.getSettled())))
-        {
-            var centers = this.centerOfMass(marbles) 
-            this.applyForces(centers, marbles);
-        }
+            if(m_list.every(m => (m.getSettled())))
+            {
+                var centers = this.centerOfMass(marbles) 
+                this.applyForces(centers, marbles);
+                this.didCalc = true; 
+            }
         this.renderer.render(this.scene, this.camera);
-    }
-
-    // Update each tweet object
-    updateTweets = (tweets) => {
-        this.state = {...this.state, tweets};
-        const oldSubjects = this.sceneSubjects.filter(x => {
-            if (x.isMarble) this.scene.remove(x.marble);
-            return !x.isMarble;
-        });
-        const newSubjects = [...oldSubjects];
-
-        // construct necessary new marbles
-        tweets.forEach((tweet) => {
-            const marble = new Marble(this.scene, tweet);
-            marble.addForce(this.gravity);
-            newSubjects.push(marble);
-        });
-
-        this.sceneSubjects = newSubjects;
     }
 
     /**
