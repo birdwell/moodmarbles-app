@@ -157,14 +157,44 @@ export default class SceneManager {
         var keys = Object.keys(centers);
         keys.forEach( k => {
             var my_marb = marbles[k];
-            my_marb.forEach( m => {
-                var f_vec = Vector.subtract(centers[k], m.getPosition());
-                if(!f_vec.isZero()) {
-                    f_vec = f_vec.normalize();
-                }
-                f_vec.scale(-0.01);
-                var f = new Force("center", f_vec, false);
-                m.addForce(f);
+            if(my_marb.length) {
+                my_marb.forEach( m => {
+                    var f_vec = Vector.subtract(centers[k], m.getPosition());
+                    if(!f_vec.isZero()) {
+                        f_vec = f_vec.normalize();
+                    }
+                    f_vec.scale(-0.01);
+                    var f = new Force("center", f_vec, false);
+                    m.addForce(f);
+                });
+            }
+        });
+    }
+
+    updateList (marbles, subjects) {
+        var keys = Object.keys(marbles);
+        keys.forEach( k => {
+            var marbs = marbles[k];
+            var del = [];
+            marbs.forEach( m1 => {
+                var match = marbs.filter(m2 => {
+                    if(m1 !== m2 && del.indexOf(m2) < 0) {
+                        var diff = Vector.subtract(m1.getPosition(), m2.getPosition()).getMagnitude();
+                        if(diff <= 3) {
+                            return true;
+                        }
+                    }
+                    return false;
+                });
+                match.forEach(m => {
+                    del.push(m);
+                });
+            });
+            del.forEach(d => {
+                var idx = subjects.indexOf(d);
+                subjects.splice(idx, 1);
+                var s_idx = marbs.indexOf(d);
+                marbs.splice(s_idx, 1);
             });
         });
     }
@@ -181,12 +211,13 @@ export default class SceneManager {
                 m_list.push(subject);
             }
         });
-            if(m_list.every(m => (m.getSettled())))
-            {
-                var centers = this.centerOfMass(marbles) 
-                this.applyForces(centers, marbles);
-                this.didCalc = true; 
-            }
+        if(m_list.every(m => (m.getSettled())))
+        {
+            this.updateList(marbles, this.sceneSubjects);
+            var centers = this.centerOfMass(marbles) 
+            this.applyForces(centers, marbles);
+            this.didCalc = true; 
+        }
         this.renderer.render(this.scene, this.camera);
     }
 
