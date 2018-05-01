@@ -157,16 +157,22 @@ export default class SceneManager {
         var keys = Object.keys(centers);
         keys.forEach( k => {
             var my_marb = marbles[k];
-            if(my_marb.length) {
+            if(my_marb.length > 1) {
                 my_marb.forEach( m => {
                     var f_vec = Vector.subtract(centers[k], m.getPosition());
                     if(!f_vec.isZero()) {
                         f_vec = f_vec.normalize();
+                        f_vec.scale(1 / m.getMass());
                     }
                     f_vec.scale(-0.01);
                     var f = new Force("center", f_vec, false);
                     m.addForce(f);
                 });
+            } else {
+                if(!my_marb[0].hasGravity()){
+                    my_marb[0].addForce(this.gravity);
+                    my_marb[0].unSettle();
+                }
             }
         });
     }
@@ -176,25 +182,44 @@ export default class SceneManager {
         keys.forEach( k => {
             var marbs = marbles[k];
             var del = [];
+            var createNew = [];
             marbs.forEach( m1 => {
                 var match = marbs.filter(m2 => {
                     if(m1 !== m2 && del.indexOf(m2) < 0) {
                         var diff = Vector.subtract(m1.getPosition(), m2.getPosition()).getMagnitude();
-                        if(diff <= 3) {
+                        if(diff <= 10) {
                             return true;
                         }
                     }
                     return false;
                 });
+                var aggM = 0;
                 match.forEach(m => {
                     del.push(m);
+                    aggM += m.assocTweet().magnitude;
                 });
+                if(match.length > 0){
+                    var assocTweet = m1.assocTweet();
+                    assocTweet.magnitude += aggM;
+                    var newMarble = new Marble(this.scene, assocTweet);
+                    newMarble.settle();
+                    var pos = m1.getPosition();
+                    pos.add(new Vector(0, 5, 0));
+                    newMarble.setPosition(pos);
+                    createNew.push(newMarble);
+                    del.push(m1);
+                }
             });
             del.forEach(d => {
                 var idx = subjects.indexOf(d);
                 subjects.splice(idx, 1);
                 var s_idx = marbs.indexOf(d);
                 marbs.splice(s_idx, 1);
+                this.scene.remove(d.marble);
+            });
+            createNew.forEach(m => {
+                subjects.push(m);
+                marbs.push(m);
             });
         });
     }
