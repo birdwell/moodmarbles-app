@@ -94,7 +94,19 @@ export default (scene, tweet) => {
     // Get the velocity of the marble
 	function getVelocity() {
 		return velocity;
-	};
+    };
+    
+    function settle() {
+        settled = true;
+    };
+
+    function unSettle() {
+        settled = false;
+    };
+
+    function hasGravity() {
+        return forces.filter(f => (f.name == 'gravity')).length == 1;
+    };
 
     // Reflect the marble off of 
     // a given object
@@ -180,12 +192,6 @@ export default (scene, tweet) => {
 			aggregate.x += forces[i].vec.x;
 			aggregate.y += forces[i].vec.y;
             aggregate.z += forces[i].vec.z;
-            // If the force is not permanent,
-            // remove it.
-			// if(!forces[i].perm) {
-			// 	forces.splice(i, 1);
-			// 	i--;
-            // }
             forces = forces.filter(f => (f.name != "center"));
 		}
         aggregate.scale(mass);
@@ -224,6 +230,9 @@ export default (scene, tweet) => {
 		assocTweet,
 		getMass,
 		getVelocity,
-		getSettled
+        getSettled,
+        settle,
+        hasGravity,
+        unSettle
     };
 };
