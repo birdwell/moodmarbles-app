@@ -236,12 +236,14 @@ export default class SceneManager {
                 m_list.push(subject);
             }
         });
-        if(m_list.every(m => (m.getSettled())))
+        if(!this.didCalc && m_list.every(m => (m.getSettled())))
         {
+            this.didCalc = true; 
+        }
+        if(this.didCalc) {
             this.updateList(marbles, this.sceneSubjects);
             var centers = this.centerOfMass(marbles) 
             this.applyForces(centers, marbles);
-            this.didCalc = true; 
         }
         this.renderer.render(this.scene, this.camera);
     }
